@@ -1,0 +1,43 @@
+body {
+    background-color: gray;
+    background-image: url('/images/amr-background-carbon-variant-scaled.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+nav {
+    background-color: rgba(0, 0, 0, 0.557);
+}
+
+main {
+    background-color: rgba(0, 0, 0, 0.557);
+    padding-bottom: 2rem;
+}
+
+main>section {
+    width: 50%;
+    margin: auto;
+}
+
+p,
+h2 {
+    padding: 1rem 0rem;
+    font-size: 1.25rem;
+    font-weight: 400;
+    color: #FFFF00;
+    line-height: 1.52rem;
+    font-family: 'Optima Medium';
+}
+
+h2 {
+    font-family: 'Optima Bold';
+}
+
+a {
+    color: white;
+}
+
+img {
+    width: 100%;
+    margin: .75rem 0rem;
+}

@@ -1,0 +1,83 @@
+:root {
+    --padding: .5rem;
+    --border-radius: .5rem;
+}
+
+body {}
+
+main {
+    background-image: url('/images/AMR-PC-blue.png');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
+}
+
+main>section {
+    background-color: #fffffff3;
+}
+
+main>section>div {
+    width: 50%;
+    margin: auto;
+}
+
+h1 {
+    text-transform: uppercase;
+    font-family: 'Optima Bold';
+    font-size: 1.8rem;
+}
+
+span {
+    color: #1413139E;
+}
+
+form label {
+    display: block;
+    font-family: 'Optima Medium';
+}
+
+div.form-group {
+    margin-bottom: 1rem;
+}
+
+div.form-group.email {
+    margin-top: 2rem;
+}
+
+input:not([type=file], [type=radio]),
+select,
+textarea {
+    width: 100%;
+    border-radius: var(--border-radius);
+    padding: var(--padding);
+    border: 1px solid gray;
+
+    &:focus {
+        outline: none;
+    }
+}
+
+
+button {
+    width: 100%;
+    border-radius: var(--border-radius);
+    padding: var(--padding);
+    color: white;
+    font-weight: 500;
+    background-color: #7c7c7c;
+    border: none;
+
+    &:hover {
+        background-color: #2C2C2C;
+    }
+}
+
+nav a {
+    &:hover {
+        color: black !important;
+    }
+
+    &.active {
+        color: black;
+    }
+}
