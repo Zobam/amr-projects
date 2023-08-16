@@ -81,3 +81,31 @@ nav a {
         color: black;
     }
 }
+
+#code-container {
+    display: none;
+    box-shadow: 2px 2px 2px gray;
+    max-height: 25vh;
+    overflow-y: scroll;
+    border: 1px solid rgb(65, 65, 19);
+}
+
+#code-container ul,
+#code-container li {
+    margin: 0px;
+    padding: 0px;
+}
+
+#code-container li {
+    cursor: pointer;
+    padding: .25rem;
+    list-style-type: none;
+
+    &:hover {
+        background-color: rgb(217, 216, 216);
+    }
+}
+
+#code-container li img {
+    max-width: 2rem;
+}

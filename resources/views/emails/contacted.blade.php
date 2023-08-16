@@ -49,6 +49,11 @@
             padding: .75rem;
             width: 100%;
         }
+
+        div p {
+            margin: .2rem 0rem;
+            padding: .2rem 0rem;
+        }
     </style>
 </head>
 
@@ -59,7 +64,7 @@
         <h2>Your contact details are as follow:</h2>
         <div class="">
             <div style="width: min(20rem, 96%); margin: auto">
-                <figure><img src="{{ $message->embed(public_path('/images/email/passport_image.png')) }}" style="max-width: 100%;" alt="guest passport image">
+                <figure><img src="{{ $message->embed(public_path($data->passport_link)) }}" style="max-width: 100%;" alt="guest passport image">
                     <figcaption style="color: #FFFF00; background-color:black; padding:.25rem">Your passport</figcaption>
                 </figure>
             </div>

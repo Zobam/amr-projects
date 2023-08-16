@@ -39,6 +39,7 @@
                     <div class="col-6 form-group">
                         <label for="country_code">Country Code <span>*</span></label>
                         <input type="text" name="country_code" id="country_code">
+                        <div id="code-container">234</div>
                     </div>
                     <div class="col-6 form-group">
                         <label for="contact_no">Contact Number <span>*</span></label>
@@ -79,11 +80,51 @@
         </div>
     </section>
     <script>
-        console.log(window.axios);
+        const codeContainer = document.getElementById('code-container');
+        const codeInput = document.getElementById('country_code');
+        // respond to focusing on country code field and typing on it
+        codeInput.addEventListener('focus', filterCodes);
+        codeInput.addEventListener('keyup', filterCodes);
+
+        let allCountryCodes;
+        let loading = true;
         axios.get('https://api.beezlinq.com/api/v1/get/countries').then(response => {
             console.log(response.data);
+            allCountryCodes = response.data.data;
+            loading = false;
         }).catch(e => {
             console.log('an error occurred: ', e);
         });
+        // hide a provided element
+        function hideElement(elem) {
+            elem.style.display = 'none';
+        }
+
+        function filterCodes() {
+            const val = codeInput.value;
+            let filteredAllCountryCodes = allCountryCodes.filter(country => country.name.toLowerCase().indexOf(val.toLowerCase()) != -1 || country.phonecode.toString().indexOf(val) != -1);
+            // console.log(filteredAllCountryCodes);
+            appendList(filteredAllCountryCodes);
+        }
+
+        function appendList(countries) {
+            if (countries.length) {
+                let codeHtml = '<ul>';
+                for (let country of countries) {
+                    codeHtml += `<li onClick="setCode(${country.phonecode})">
+                    <img src="${country.flag}" alt="${country.name} flag">
+                    (${country.phonecode}) ${country.name}
+                    </li>`;
+                }
+                codeHtml += '</ul>';
+                codeContainer.innerHTML = codeHtml;
+                codeContainer.style.display = 'block';
+            }
+        }
+
+        function setCode(countryCode) {
+            codeInput.value = `+(${countryCode})`;
+            hideElement(codeContainer);
+        }
     </script>
 </x-layout>
