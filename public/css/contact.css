@@ -109,3 +109,7 @@ nav a {
 #code-container li img {
     max-width: 2rem;
 }
+
+span#verifying {
+    display: none;
+}
