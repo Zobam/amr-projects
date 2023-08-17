@@ -41,3 +41,13 @@
     a {
         text-decoration: none;
     }
+
+    a.active {
+        color: white;
+        text-shadow: 1px 1px 1px;
+        letter-spacing: .075rem;
+    }
+
+    a.activeContact {
+        color: black;
+    }
