@@ -31,7 +31,7 @@ span {
     color: #1413139E;
 }
 
-form label {
+form label[for] {
     display: block;
     font-family: 'Optima Medium';
 }
@@ -143,4 +143,10 @@ div#verifying.error {
 
 div#verifying.success {
     border: 1px solid #06c43f;
+}
+
+span.error {
+    color: #cd0505;
+    font-family: 'Optima Medium';
+    display: none;
 }

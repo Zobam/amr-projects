@@ -52,6 +52,8 @@ function appendList(countries) {
 function setCode(countryCode) {
     codeInput.value = `+(${countryCode})`;
     hideElement(codeContainer);
+    hideElement(document.getElementById('country_code_error'));
+    contactForm.country_code = true;
 }
 function updateResponseText(text) {
     verifyingElem.innerHTML = text;
@@ -96,7 +98,9 @@ function verifyPassport() {
                 passedVerification = true;
                 updateResponseText("Passport verified.");
                 addClass(verifyingElem, 'success');
-                disableForm(false);
+                // disableForm(false);
+                contactForm.passport = true;
+                checkFormValidity('email', 'email');
             } else {
                 updateResponseText('Passport verification failed. Please make sure to upload clear image');
                 disableForm();

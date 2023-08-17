@@ -24,28 +24,33 @@
                 </div>
                 <div class="form-group">
                     <label for="gov-rep">Are you representing a Government:<span>*</span></label>
-                    <input type="radio" name="gov_rep" value=1 class="gov-rep"> Yes
-                    <input type="radio" name="gov_rep" value=0 class="gov-rep"> No
+                    <label><input type="radio" name="gov_rep" value=1 class="gov-rep"> Yes</label>
+                    <label style="display: inline-block; margin-left: .5rem"><input type="radio" name="gov_rep" value=0 class="gov-rep"> No</label>
+                    <span class="error" id="gov_rep_error">Choose one.</span>
                 </div>
                 <div class="row">
                     <div class="col-12 col-md-6 form-group">
                         <label for="organization">Name of Organisation <span>*</span></label>
                         <input type="text" name="organization" id="organization">
+                        <span class="error" id="organization_error">Name of organization is required.</span>
                     </div>
                     <div class="col-12 col-md-6 form-group">
                         <label for="designation">Designation <span>*</span></label>
                         <input type="text" name="designation" id="designation">
+                        <span class="error" id="designation_error">Designation is required.</span>
                     </div>
                 </div>
                 <div class="d-flex">
                     <div class=" form-group" style="margin-right: 1rem; position: relative">
                         <label for="country_code">Country Code <span>*</span></label>
-                        <input type="text" name="country_code" id="country_code">
-                        <div id="code-container">234</div>
+                        <input type="text" name="country_code" id="country_code" onchange="checkFormValidity('contact_no', 'code')">
+                        <span class="error" id="country_code_error">Country code is required.</span>
+                        <div id="code-container"></div>
                     </div>
                     <div class="flex-grow-1 form-group">
                         <label for="contact_no">Contact Number <span>*</span></label>
-                        <input type="tel" name="contact_no" id="contact_no">
+                        <input type="tel" name="contact_no" id="contact_no" onchange="checkFormValidity('contact_no', 'tel')">
+                        <span class="error" id="contact_no_error">Number should be 8-11 digits.</span>
                     </div>
                 </div>
                 <div class="form-group">
@@ -73,7 +78,8 @@
                 </div>
                 <div class="form-group email">
                     <label for="email">Email <span>*</span></label>
-                    <input type="email" name="email" id="" placeholder="Enter reply email">
+                    <input type="email" name="email" id="email" onchange="checkFormValidity('email', 'email')" placeholder="Enter reply email">
+                    <span class="error" id="email_error">Enter valid email address.</span>
                 </div>
                 <div class="d-flex justify-content-center mt-4">
                     <button id="submit-btn" disabled>Send</button>
@@ -82,4 +88,5 @@
         </div>
     </section>
     <script src="{{asset('/js/contact.js')}}"></script>
+    <script src="{{asset('/js/validation.js')}}"></script>
 </x-layout>
