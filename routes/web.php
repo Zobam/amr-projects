@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function (Request $request) {
-    Log::info('The client\'s ip address: ' . $request->ip());
+    // Log::info('The client\'s ip address: ' . $request->ip());
     return view('welcome');
 });
 Route::get('/contact', function () {
