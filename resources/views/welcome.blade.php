@@ -2,6 +2,12 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <x-layout styleLink='css/homepage.css'>
+    @if(session()->has('status'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Thank you.</strong> We received your message.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    @endif
     <section>
         <div class="d-flex justify-content-center"><img src="/images/AMR-PC-yellow-1-min.png" alt="amr logo"></div>
         <p>Welcome to AMR Project Consultancy</p>

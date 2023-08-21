@@ -19,7 +19,7 @@ class ContactController extends Controller
             'gov_rep' => ['required', 'max:1'],
             'organization' => ['required', 'string', 'max:40'],
             'designation' => ['required', 'string', 'max:40'],
-            'country_code' => ['required', 'string', 'max:4'],
+            'country_code' => ['required', 'string', 'max:8'],
             'contact_no' => ['required', 'string', 'min:8', 'max:14'],
             'response_time' => ['required', 'string', 'max:140'],
             'best_time' => ['required', 'string', 'max:140'],
@@ -27,7 +27,8 @@ class ContactController extends Controller
             'email' => ['required', 'email'],
         ]);
         try {
-            $recipients = ['info@amrprojects.com', $request->email];
+            // $recipients = ['amrprojects@proton.me', $request->email];
+            $recipients = ['chizoba@bexit.com.ng', $request->email];
             // save the uploaded passport
             $image_file = $request->passport;
             $image_name = 'passport_image' . $request->contact_no . '.' . $image_file->getClientOriginalExtension();
@@ -44,8 +45,11 @@ class ContactController extends Controller
             foreach ($recipients as $recipient) {
                 Mail::to($recipient)->send(new ContactReceived($request));
             }
+            $request->session()->flash('status', 'success');
             return redirect('/');
         } catch (Exception $e) {
+            Log::info('an error occurred');
+            Log::warning($e);
             return back()->withInput();
         } finally {
             // delete the passport image

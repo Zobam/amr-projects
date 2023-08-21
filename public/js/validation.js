@@ -32,7 +32,8 @@ function checkFormValidity(elemID, type) {
     if (type == 'email') {
         const re = /\S+@\S+\.\S+/;
         if (!re.test(inputValue)) {
-            hideElement(errorElem, false);
+            if (inputValue.length)
+                hideElement(errorElem, false);
             contactForm.email = false;
         } else {
             hideElement(errorElem);
@@ -40,7 +41,8 @@ function checkFormValidity(elemID, type) {
         }
     } else if (type == 'tel') {
         if (inputValue.length < 8) {
-            hideElement(errorElem, false);
+            if (inputValue.length)
+                hideElement(errorElem, false);
             contactForm.contact_no = false;
         } else {
             hideElement(errorElem);
@@ -50,7 +52,8 @@ function checkFormValidity(elemID, type) {
 
     } else if (type == 'code') {
         if (!inputValue) {
-            hideElement(errorElem, false);
+            if (inputValue.length)
+                hideElement(errorElem, false);
             contactForm.country_code = false;
         } else {
             hideElement(errorElem);
@@ -71,7 +74,7 @@ function checkFormValidity(elemID, type) {
     let formHasError = false;
     for (const field in contactForm) {
         if (!contactForm[field]) {
-            // console.log(field, contactForm[field]);
+            console.log(field, contactForm[field]);
             formHasError = true;
             break;
         }
@@ -82,3 +85,8 @@ function checkFormValidity(elemID, type) {
         disableForm();
     }
 }
+// check validity on load for page returning from server after validation fail
+checkFormValidity('contact_no', 'tel');
+checkFormValidity('email', 'email');
+checkFormValidity('country_code', 'code');
+
