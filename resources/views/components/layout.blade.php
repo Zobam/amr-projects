@@ -1,3 +1,6 @@
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,6 +16,7 @@
     <link href="{{ asset('css/main.css') }}" rel="stylesheet">
     <link href="{{ asset('css/navigation.css') }}" rel="stylesheet">
     <link href="{{ asset($styleLink?? 'css/main.css') }}" rel="stylesheet">
+    <!-- <link href="{{ asset('css/animation.css') }}" rel="stylesheet"> -->
     <link href="{{ asset('css/navigation.css') }}" rel="stylesheet">
 
     <!-- scripts -->
@@ -26,6 +30,17 @@
     <main class="">
         {{ $slot}}
     </main>
+    <!-- include animation library -->
+    <script src="{{asset('/js/jsap.js')}}"></script>
+    <!-- <script>
+        // const duration = 4;
+        gsap.from('#nav', {
+            opacity: 0,
+            duration: 1,
+            // scale: .25,
+            delay: 3,
+        }) -->
+    </script>
 </body>
 
 </html>

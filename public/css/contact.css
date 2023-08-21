@@ -19,6 +19,7 @@ main>section {
 main>section>div {
     width: min(90%, 40rem);
     margin: auto;
+    padding: 1rem 0rem;
 }
 
 h1 {
