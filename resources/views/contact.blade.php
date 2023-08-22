@@ -80,6 +80,7 @@
                     <label for="email">Email <span>*</span></label>
                     <input type="email" name="email" id="email" value="{{ old('email') }}" onchange="checkFormValidity('email', 'email')" placeholder="Enter reply email">
                     <span class="error" id="email_error">Enter valid email address.</span>
+                    <input type="hidden" name="passport_link" id="passport_link">
                 </div>
                 <!-- recaptcha -->
                 <div class="form-group">
@@ -104,6 +105,7 @@
                 event.preventDefault();
                 hideElement(recaptchaErrorElem, false);
             } else {
+                document.getElementById('passport_link').value = passportLink;
                 hideElement(recaptchaErrorElem);
             }
         })

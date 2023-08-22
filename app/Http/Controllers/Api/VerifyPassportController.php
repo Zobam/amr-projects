@@ -6,53 +6,15 @@ use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rules\File;
 
 class VerifyPassportController extends Controller
 {
+    public $uploaded_image_extension;
     // verify passport
     public function verify_passport(Request $request)
     {
-        /* // set cURL options
-        $FILE_PATH = 'images/email/passport_image09034343434.jpg';
-        $MIME_TYPE = 'image/png'; // change according to the file type
-
-        // Open a cURL session to send the document
-        $ch = curl_init();
-        // Setup headers
-        $headers = array(
-            "Authorization: Token " . config('mindee.mindee_api_key')
-        );
-        // Add our file to the request
-        $data = array(
-            "document" => new \CURLFile(
-                $FILE_PATH,
-                $MIME_TYPE,
-                substr($FILE_PATH, strrpos($FILE_PATH, "/") + 1)
-            )
-        );
-
-        $options = array(
-            CURLOPT_URL => config('mindee.mindee_api_url'),
-            CURLOPT_HTTPHEADER => $headers,
-            CURLOPT_POSTFIELDS => $data,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_RETURNTRANSFER => true
-        );
-        // Set all options for the cURL request
-        curl_setopt_array(
-            $ch,
-            $options
-        );
-        // Execute the request & extract the query content into a variable
-        $json = curl_exec($ch);
-
-        // Close the cURL session
-        curl_close($ch);
-
-        // Store the response as an array to allow for easier manipulations
-        $result = json_decode($json, true);
-        Log::info('Result from curl to mindee: \n' . json_encode($result, JSON_PRETTY_PRINT)); */
-        $result = [
+        /* $result = [
             "api_request" => [
                 "error" => [],
                 "resources" => ["document"],
@@ -366,27 +328,58 @@ class VerifyPassportController extends Controller
                 "n_pages" => 1,
                 "name" => "passport_image09034343434.jpg",
             ],
-        ];
+        ]; */
+        $attempt_limit = 3;
 
-        $prediction = $result['document']['inference']['prediction'];
-        $response = ['status' => 'success', 'message' => 'Passport passed verification check.'];
-        if (!$this->checkPassportValidity($prediction)) {
-            $response['status'] = 'error';
-            $response['message'] = 'Passport failed verification check.';
-        }
-        return $response;
+        $validated = $request->validate([
+            'passport' => ['required', File::types(['jpg', 'jpeg', 'png'])->min(10)],
+            'verification_attempts' => ['required', 'max:4'],
+        ]);
+        // ensure verification attempts has not exceeded limit
+        if ($request->verification_attempts < $attempt_limit && !$this->checkIfBlacklisted($request->ip())) {
 
-        $ip_address = $request->ip_address ?? '';
-        // send response to front end
-        if ($this->blacklist($ip_address)) {
-            return response()->json([
-                'status' => 'success',
-                'message' => 'IP address successfully blacklisted',
-            ]);
+            return $validated;
+            try {
+                // save the uploaded passport
+                $image_file = $request->passport;
+                $this->uploaded_image_extension = $image_file->getClientOriginalExtension();
+                $image_name = 'passport_image' . $request->ip() . '.' . $this->uploaded_image_extension;
+                $save_dir = 'images/email/';
+                // move passport image
+                $image_file->move($save_dir, $image_name);
+                // add the passport link to the request collection
+                $passport_link =  $save_dir . $image_name;
+                // submit passport to mindee api
+                $result = $this->submitPassportToApi($passport_link);
+                $response = [
+                    'status' => 'success',
+                    'message' => 'Passport passed verification check.',
+                    'passport_link' => $passport_link,
+                ];
+                if (is_array($result)) {
+                    $prediction = $result['document']['inference']['prediction'];
+                    if (!$this->checkPassportValidity($prediction)) {
+                        $response['status'] = 'error';
+                        $response['message'] = 'Passport failed verification check.';
+                        // delete passport if it failed validity check
+                        $this->delete_passport($passport_link);
+                    }
+                } else {
+                    $response['status'] = 'error';
+                    $response['message'] = 'Error from passport validation server.';
+                }
+            } catch (Exception $e) {
+                Log::info('an error occurred saving uploaded image');
+                Log::warning($e);
+            }
+            return $response;
         } else {
+            $ip_address = $request->ip();
+            // send response to front end
+            $this->blacklist($ip_address);
             return response()->json([
                 'status' => 'error',
-                'message' => 'IP address was not successfully blacklisted',
+                'message' => 'IP address blacklisted',
             ]);
         }
     }
@@ -424,6 +417,58 @@ class VerifyPassportController extends Controller
             return false;
         }
     }
+    // submit guest passport to mindee api for processing
+    public function submitPassportToApi($passport_link)
+    {
+        try {
+            // set cURL options
+            $FILE_PATH = $passport_link;
+            $MIME_TYPE = 'image/' . $this->uploaded_image_extension; // change according to the file type
+
+            // Open a cURL session to send the document
+            $ch = curl_init();
+            // Setup headers
+            $headers = array(
+                "Authorization: Token " . config('mindee.mindee_api_key')
+            );
+            // Add our file to the request
+            $data = array(
+                "document" => new \CURLFile(
+                    $FILE_PATH,
+                    $MIME_TYPE,
+                    substr($FILE_PATH, strrpos($FILE_PATH, "/") + 1)
+                )
+            );
+
+            $options = array(
+                CURLOPT_URL => config('mindee.mindee_api_url'),
+                CURLOPT_HTTPHEADER => $headers,
+                CURLOPT_POSTFIELDS => $data,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_RETURNTRANSFER => true
+            );
+            // Set all options for the cURL request
+            curl_setopt_array(
+                $ch,
+                $options
+            );
+            // Execute the request & extract the query content into a variable
+            $json = curl_exec($ch);
+
+            // Close the cURL session
+            curl_close($ch);
+
+            // Store the response as an array to allow for easier manipulations
+            return json_decode($json, true);
+        } catch (Exception $e) {
+            Log::warning($e);
+            // delete passport
+            $this->delete_passport($passport_link);
+            return false;
+        } finally {
+            Log::info('completed trip to mindee api: ' . json_encode($json));
+        }
+    }
     public function checkPassportValidity($prediction)
     {
         $score_per_prediction = 10;
@@ -432,7 +477,9 @@ class VerifyPassportController extends Controller
             $verificationParams = ['birth_date', 'birth_place', 'country', 'expiry_date', 'gender', 'given_names', 'id_number', 'issuance_date', 'mrz1', 'surname'];
             foreach ($verificationParams as $value) {
                 if ($value == 'given_names') {
-                    $confidence_score += $score_per_prediction * $prediction[$value][0]['confidence'];
+                    if (count($prediction[$value])) {
+                        $confidence_score += $score_per_prediction * $prediction[$value][0]['confidence'];
+                    }
                 } else {
                     $confidence_score += $score_per_prediction * $prediction[$value]['confidence'];
                 }
@@ -441,5 +488,12 @@ class VerifyPassportController extends Controller
             return false;
         }
         return $confidence_score > 50 ? true : false;
+    }
+    // handle the deletion of the passport image
+    public function delete_passport($link)
+    {
+        if (file_exists($link)) {
+            unlink($link);
+        }
     }
 }

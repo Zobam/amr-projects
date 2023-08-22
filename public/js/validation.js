@@ -1,7 +1,7 @@
 
 
 const contactForm = {
-    passport: false,
+    // passport: false,
     gov_rep: false,
     organization: false,
     designation: false,

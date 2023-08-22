@@ -3,6 +3,12 @@ const codeInput = document.getElementById('country_code');
 const passportInput = document.getElementById('passport');
 let verifyingPassport = false;
 let verifyingElem = document.getElementById('verifying');
+let passportLink;
+let verificationAttempts = 0;
+// update verification attempts from local storage if it exist
+if (localStorage.getItem("verificationAttempts") !== null) {
+    verificationAttempts = Number(localStorage.getItem("verificationAttempts"));
+}
 // respond to focusing on country code field and typing on it
 codeInput.addEventListener('focus', filterCodes);
 codeInput.addEventListener('keyup', filterCodes);
@@ -85,23 +91,23 @@ function verifyPassport() {
     if (guestPassport) {
         console.log(guestPassport);
         let data = new FormData();
-        data.append("document", guestPassport, guestPassport.name);
-        axios.post('https://api.mindee.net/v1/products/mindee/passport/v1/predict', data, {
-            headers: {
-                "Authorization": 'Token 5f0e24288231134c326e3b70da260c3b'
-            }
-        }).then(response => {
+        data.append("passport", guestPassport, guestPassport.name);
+        data.append('verification_attempts', verificationAttempts);
+        axios.post('http://127.0.0.1:8000/api/verify_passport', data).then(response => {
             // console.log('back from mindee api');
             console.log(response.data);
-            const score = checkValidityScore(response.data.document.inference.prediction);
-            if (score > 50) {
+            if (response.data.status == 'success') {
                 passedVerification = true;
+                passportLink = response.data.passport_link;
                 updateResponseText("Passport verified.");
                 addClass(verifyingElem, 'success');
                 // disableForm(false);
                 contactForm.passport = true;
                 checkFormValidity('email', 'email');
             } else {
+                if (response.data.message.indexOf('blacklisted') != 1) {
+                    location = '/_';
+                }
                 updateResponseText('Passport verification failed. Please make sure to upload clear image');
                 disableForm();
                 addClass(verifyingElem, 'error');
@@ -115,6 +121,8 @@ function verifyPassport() {
         }).finally(() => {
             // hideElement(verifyingElem);
             addClass(verifyingElem, 'loading', false);
+            verificationAttempts++;
+            localStorage.setItem("verificationAttempts", verificationAttempts);
         });
     }
 
