@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Http\Request;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
@@ -19,7 +20,7 @@ class ContactReceived extends Mailable
      */
     public function __construct(public Request $data)
     {
-        //
+        $this->data = $data;
     }
 
     /**
@@ -49,6 +50,11 @@ class ContactReceived extends Mailable
      */
     public function attachments(): array
     {
+        if ($this->data->is_pdf) {
+            return [
+                Attachment::fromPath($this->data->passport_link)->as('passport')->withMime('application/pdf'),
+            ];
+        }
         return [];
     }
 }

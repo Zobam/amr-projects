@@ -112,6 +112,12 @@ function verifyPassport() {
                 addClass(verifyingElem, 'success');
                 // disableForm(false);
                 contactForm.passport = true;
+                // disable passport input element
+                passportInput.setAttribute('disabled', true);
+                // increment verification attempts and save in local storage
+                verificationAttempts++;
+                localStorage.setItem("verificationAttempts", verificationAttempts);
+
                 checkFormValidity('email', 'email');
             } else {
                 if (response.data?.error_code == '002') {

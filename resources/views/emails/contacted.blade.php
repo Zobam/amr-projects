@@ -63,11 +63,13 @@
         <p>We will get back to you soonest within your specified time.</p>
         <h2>Your contact details are as follow:</h2>
         <div class="">
+            @if(!$data->is_pdf)
             <div style="width: min(20rem, 96%); margin: auto">
                 <figure><img src="{{ $message->embed(public_path($data->passport_link)) }}" style="max-width: 100%;" alt="guest passport image">
                     <figcaption style="color: #FFFF00; background-color:black; padding:.25rem">Your passport</figcaption>
                 </figure>
             </div>
+            @endif
             <p>
                 Are you representing a government: <span>{{$data->gov_rep?? ""}}</span>
             </p>

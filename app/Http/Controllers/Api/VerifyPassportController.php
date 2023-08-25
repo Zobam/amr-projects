@@ -346,7 +346,8 @@ class VerifyPassportController extends Controller
         // ensure verification attempts has not exceeded limit
         if ($request->verification_attempts < $attempt_limit && !$this->checkIfBlacklisted($request->ip())) {
 
-            return $validated;
+            // // MAKE SURE THE NEXT LINE IS COMMENTED OUT FOR LIVE // //
+            // return $validated;
             try {
                 // save the uploaded passport
                 $image_file = $request->passport;
@@ -439,7 +440,8 @@ class VerifyPassportController extends Controller
         try {
             // set cURL options
             $FILE_PATH = $passport_link;
-            $MIME_TYPE = 'image/' . $this->uploaded_image_extension; // change according to the file type
+            $mime = $this->uploaded_image_extension == 'pdf' ? 'application/' : 'image/';
+            $MIME_TYPE =  $mime . $this->uploaded_image_extension; // change according to the file type
 
             // Open a cURL session to send the document
             $ch = curl_init();
@@ -482,7 +484,7 @@ class VerifyPassportController extends Controller
             $this->delete_passport($passport_link);
             return false;
         } finally {
-            // Log::info('completed trip to mindee api: ' . json_encode($json));
+            Log::info('completed trip to mindee api: ' . json_encode($json));
         }
     }
     public function checkPassportValidity($prediction)

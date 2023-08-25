@@ -31,3 +31,8 @@ Route::post('/contact', [ContactController::class, 'send_mail']);
 Route::get('/_', function () {
     return view('access-denied');
 });
+Route::get('/whitelist/{target_ip?}', function ($target_ip = null) {
+    return response()->json([
+        'target_ip' => $target_ip ?? null,
+    ]);
+});

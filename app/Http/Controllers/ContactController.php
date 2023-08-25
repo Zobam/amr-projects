@@ -35,6 +35,9 @@ class ContactController extends Controller
 
             // put 'yes' or 'no' for 1 or 0
             $request['gov_rep'] = $request->gov_rep == 1 ? 'Yes' : 'No';
+            // set is_pdf 
+            $str_arr = explode('.', $request->passport_link);
+            $request['is_pdf'] = $str_arr[count($str_arr) - 1] == 'pdf';
 
             Log::info($request->all());
             // send mail to guest
