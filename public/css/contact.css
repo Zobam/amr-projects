@@ -3,6 +3,10 @@
     --border-radius: .5rem;
 }
 
+nav {
+    opacity: 1;
+}
+
 body {}
 
 main {
@@ -140,6 +144,18 @@ div#verifying.loading {
 
 div#verifying.error {
     border: 1px solid #cd0505;
+}
+
+div#verifying.error p {
+    color: #cd0505;
+    font-family: 'Optima Medium';
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+}
+
+div#verifying.error strong {
+    color: #cd0505;
+    font-family: 'Optima Bold';
 }
 
 div#verifying.success {

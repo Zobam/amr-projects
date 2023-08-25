@@ -12,11 +12,19 @@
             justify-content: center;
             align-items: center;
         }
+
+        p {
+            color: red;
+            font-size: 3rem;
+            font-weight: bold;
+        }
     </style>
 </head>
 
 <body>
-    <div class="">Oops! Try again later.</div>
+    <div class="">
+        <p>You have been blocked from this website.</p>
+    </div>
 </body>
 
 </html>

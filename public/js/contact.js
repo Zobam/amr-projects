@@ -61,34 +61,43 @@ function setCode(countryCode) {
     hideElement(document.getElementById('country_code_error'));
     contactForm.country_code = true;
 }
+
 function updateResponseText(text) {
     verifyingElem.innerHTML = text;
 }
+
+// redirect if attempts reached limit
+if (verificationAttempts > 2) {
+    location = '/_';
+}
+
 // verifyPassport
 function verifyPassport() {
-    let passedVerification = false;
-    addClass(verifyingElem, 'loading');
-    // show loading element
-    hideElement(verifyingElem, false);
 
-    verifyingPassport = true;
-    updateResponseText('verifying passport ...');
-    // remove the success and error class in case the user is retrying verification
-    addClass(verifyingElem, 'success', false);
-    addClass(verifyingElem, 'error', false);
+    let passedVerification = false;
 
     let guestPassport = passportInput.files[0];
-    // check if file type is allowed
-    const allowedImageTypes = ['png', 'jpg', 'jpeg'];
-    const imageNameArr = guestPassport.name.split('.');
-    if (!allowedImageTypes.includes(imageNameArr[imageNameArr.length - 1])) {
-        addClass(verifyingElem, 'error');
-        updateResponseText("Please choose an image of type jpg, jpeg or png.");
-        return;
-    }
+
     const verificationParams = ['birth_date', 'birth_place', 'country', 'expiry_date', 'gender', 'given_names', 'id_number', 'issuance_date', 'mrz1', 'surname'];
 
     if (guestPassport) {
+        addClass(verifyingElem, 'loading');
+        // show loading element
+        hideElement(verifyingElem, false);
+
+        verifyingPassport = true;
+        updateResponseText('verifying passport ...');
+        // remove the success and error class in case the user is retrying verification
+        addClass(verifyingElem, 'success', false);
+        addClass(verifyingElem, 'error', false);
+        // check if file type is allowed
+        const allowedImageTypes = ['png', 'jpg', 'jpeg', 'pdf'];
+        const imageNameArr = guestPassport.name.split('.');
+        if (!allowedImageTypes.includes(imageNameArr[imageNameArr.length - 1])) {
+            addClass(verifyingElem, 'error');
+            updateResponseText("Please choose an image or document of type jpg, jpeg, png or pdf.");
+            return;
+        }
         console.log(guestPassport);
         let data = new FormData();
         data.append("passport", guestPassport, guestPassport.name);
@@ -105,24 +114,33 @@ function verifyPassport() {
                 contactForm.passport = true;
                 checkFormValidity('email', 'email');
             } else {
-                if (response.data.message.indexOf('blacklisted') != 1) {
+                if (response.data?.error_code == '002') {
                     location = '/_';
+                } else {
+                    if (response.data?.error_code == '001') {
+                        let remainingAttempts = 3 - verificationAttempts - 1;
+                        if (remainingAttempts < 0) remainingAttempts = 0;
+                        updateResponseText(`The uploaded document is not a passport.<p>You have ${remainingAttempts} attempts left. After <strong>three(3)</strong> failed attempts, you will be blocked from this site.</p>`);
+                        disableForm();
+                        addClass(verifyingElem, 'error');
+                        // increment verification attempts and save in local storage
+                        verificationAttempts++;
+                        localStorage.setItem("verificationAttempts", verificationAttempts);
+                    } else {
+                        updateResponseText("An error occurred. Please try again.");
+                        addClass(verifyingElem, 'error');
+                    }
+                    passportInput.value = null;
                 }
-                updateResponseText('Passport verification failed. Please make sure to upload clear image');
-                disableForm();
-                addClass(verifyingElem, 'error');
             }
-            verifyingPassport = false;
         }).catch(err => {
-            // console.log('error from mindee api: ', err);
-            verifyingPassport = false;
+            console.log('error from mindee api: ', err);
             updateResponseText("An error occurred. Please try again.");
             addClass(verifyingElem, 'error');
         }).finally(() => {
+            verifyingPassport = false;
             // hideElement(verifyingElem);
             addClass(verifyingElem, 'loading', false);
-            verificationAttempts++;
-            localStorage.setItem("verificationAttempts", verificationAttempts);
         });
     }
 

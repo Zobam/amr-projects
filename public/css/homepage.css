@@ -7,6 +7,7 @@ body {
 
 nav {
     background-color: rgba(0, 0, 0, 0.557);
+    opacity: 0;
 }
 
 main {
@@ -40,6 +41,6 @@ a {
 img {
     width: 100%;
     margin: .75rem 0rem;
-    transform: scale(1.5);
+    transform: scale(4.5);
     opacity: 0;
 }

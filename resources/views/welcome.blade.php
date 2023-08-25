@@ -31,7 +31,7 @@
         window.onload = function() {
             document.getElementById('amr-logo').style.opacity = '1';
 
-            const duration = 1;
+            const duration = 3;
             gsap.to('#nav', {
                 opacity: 1,
                 duration: duration / 4,

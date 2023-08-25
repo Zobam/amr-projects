@@ -8,6 +8,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rules\File;
 
+// define enums for various error situation. This will help to count verification attempts if and only if the error is due to uploading non passport image ie error code 001
+enum ErrorCodes: string
+{
+    case FailedVerification = '001';
+    case IPBlackListed = '002';
+    case ServerError = '003';
+}
+
 class VerifyPassportController extends Controller
 {
     public $uploaded_image_extension;
@@ -332,7 +340,7 @@ class VerifyPassportController extends Controller
         $attempt_limit = 3;
 
         $validated = $request->validate([
-            'passport' => ['required', File::types(['jpg', 'jpeg', 'png'])->min(10)],
+            'passport' => ['required', File::types(['jpg', 'jpeg', 'png', 'pdf'])->min(10)],
             'verification_attempts' => ['required', 'max:4'],
         ]);
         // ensure verification attempts has not exceeded limit
@@ -360,17 +368,24 @@ class VerifyPassportController extends Controller
                     $prediction = $result['document']['inference']['prediction'];
                     if (!$this->checkPassportValidity($prediction)) {
                         $response['status'] = 'error';
+                        $response['error_code'] = ErrorCodes::FailedVerification->value;
                         $response['message'] = 'Passport failed verification check.';
+                        // blacklist ip if this is the 3rd failed attempt
+                        if ($request->verification_attempts == 2) {
+                            $this->blacklist($request->ip());
+                            $response['message'] = 'IP address blacklisted.';
+                        }
                         // delete passport if it failed validity check
                         $this->delete_passport($passport_link);
                     }
                 } else {
                     $response['status'] = 'error';
+                    $response['error_code'] = ErrorCodes::ServerError->value;
                     $response['message'] = 'Error from passport validation server.';
                 }
             } catch (Exception $e) {
-                Log::info('an error occurred saving uploaded image');
-                Log::warning($e);
+                // Log::info('an error occurred saving uploaded image');
+                Log::info($e);
             }
             return $response;
         } else {
@@ -379,6 +394,7 @@ class VerifyPassportController extends Controller
             $this->blacklist($ip_address);
             return response()->json([
                 'status' => 'error',
+                'error_code' => ErrorCodes::IPBlackListed->value,
                 'message' => 'IP address blacklisted',
             ]);
         }
@@ -406,7 +422,7 @@ class VerifyPassportController extends Controller
             $already_blacklisted = false;
             while (!feof($blacklist)) {
                 $currentLine = fgets($blacklist);
-                Log::info($currentLine);
+                // Log::info($currentLine);
                 if (strpos($currentLine, $ip_address) !== false) {
                     $already_blacklisted = true;
                     break;
@@ -461,12 +477,12 @@ class VerifyPassportController extends Controller
             // Store the response as an array to allow for easier manipulations
             return json_decode($json, true);
         } catch (Exception $e) {
-            Log::warning($e);
+            Log::info($e);
             // delete passport
             $this->delete_passport($passport_link);
             return false;
         } finally {
-            Log::info('completed trip to mindee api: ' . json_encode($json));
+            // Log::info('completed trip to mindee api: ' . json_encode($json));
         }
     }
     public function checkPassportValidity($prediction)
