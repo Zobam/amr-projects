@@ -1,10 +1,14 @@
 const codeContainer = document.getElementById('code-container');
 const codeInput = document.getElementById('country_code');
 const passportInput = document.getElementById('passport');
+const isGovRepRadioInput = document.contactForm.gov_rep;
+const countryFormGroup = document.getElementById('country-form-group');
+const organizationFormGroup = document.getElementById('organization-form-group');
 let verifyingPassport = false;
 let verifyingElem = document.getElementById('verifying');
 let passportLink;
 let verificationAttempts = 0;
+let isGovRep = false;
 // update verification attempts from local storage if it exist
 if (localStorage.getItem("verificationAttempts") !== null) {
     verificationAttempts = Number(localStorage.getItem("verificationAttempts"));
@@ -14,6 +18,37 @@ codeInput.addEventListener('focus', filterCodes);
 codeInput.addEventListener('keyup', filterCodes);
 // respond to file change
 passportInput.addEventListener('change', verifyPassport);
+// respond to is gov rep change
+let prev = null;
+for (var i = 0; i < isGovRepRadioInput.length; i++) {
+    isGovRepRadioInput[i].addEventListener('change', function () {
+        (prev) ? console.log(prev.value) : null;
+        if (this !== prev) {
+            prev = this;
+        }
+        if (this.value == 1) {
+            console.log('is gov rep');
+            isGovRep = true;
+            hideElement(organizationFormGroup);
+            hideElement(countryFormGroup, false);
+            populateCountriesOptions();
+        } else {
+            console.log('is not gov rep');
+            isGovRep = false;
+            hideElement(countryFormGroup);
+            hideElement(organizationFormGroup, false);
+        }
+    });
+}
+function populateCountriesOptions() {
+    for (const country of allCountryCodes) {
+        var option = document.createElement("option");
+        option.text = country.name;
+        option.value = country.name;
+        var select = document.getElementById("country");
+        select.appendChild(option);
+    }
+}
 
 let allCountryCodes;
 let loading = true;
@@ -77,8 +112,6 @@ function verifyPassport() {
     let passedVerification = false;
 
     let guestPassport = passportInput.files[0];
-
-    const verificationParams = ['birth_date', 'birth_place', 'country', 'expiry_date', 'gender', 'given_names', 'id_number', 'issuance_date', 'mrz1', 'surname'];
 
     if (guestPassport) {
         addClass(verifyingElem, 'loading');
@@ -148,20 +181,6 @@ function verifyPassport() {
             // hideElement(verifyingElem);
             addClass(verifyingElem, 'loading', false);
         });
-    }
-
-    function checkValidityScore(prediction) {
-        console.log('the prediction I got', prediction);
-        let confidenceScore = 0;
-        for (const param of verificationParams) {
-            if (param == 'given_names') {
-                if (prediction[param]?.length)
-                    confidenceScore += 10 * prediction[param][0]?.confidence;
-            } else {
-                confidenceScore += 10 * prediction[param]?.confidence;
-            }
-        }
-        return confidenceScore;
     }
 }
 // handle form disabling

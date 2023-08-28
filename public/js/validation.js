@@ -1,9 +1,10 @@
 
 
 const contactForm = {
-    // passport: false,
+    passport: false,
     gov_rep: false,
     organization: false,
+    country: false,
     designation: false,
     country_code: false,
     contact_no: false,
@@ -59,6 +60,15 @@ function checkFormValidity(elemID, type) {
             hideElement(errorElem);
             contactForm.country_code = true;
         }
+    } else if (type == 'country') {
+        if (!inputValue) {
+            if (inputValue.length)
+                hideElement(errorElem, false);
+            contactForm.country = false;
+        } else {
+            hideElement(errorElem);
+            contactForm.country = true;
+        }
     }
     // check for gov rep
     if (document.querySelector('input[name="gov_rep"]:checked')) {
@@ -66,6 +76,14 @@ function checkFormValidity(elemID, type) {
     }
     if (document.getElementById('organization').value) {
         contactForm.organization = true;
+    } else {
+        contactForm.organization = false;
+    }
+    if (document.getElementById('country').value) {
+        contactForm.country = true;
+        console.log('this is the value of country: ', document.getElementById('country').value);
+    } else {
+        contactForm.country = false;
     }
     if (document.getElementById('designation').value) {
         contactForm.designation = true;
@@ -75,6 +93,15 @@ function checkFormValidity(elemID, type) {
     for (const field in contactForm) {
         if (!contactForm[field]) {
             console.log(field, contactForm[field]);
+            if (isGovRep) {
+                if (field == 'organization') {
+                    continue;
+                }
+            } else {
+                if (field == 'country') {
+                    continue;
+                }
+            }
             formHasError = true;
             break;
         }

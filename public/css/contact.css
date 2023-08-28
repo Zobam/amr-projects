@@ -54,6 +54,10 @@ div.form-group.email {
     margin-top: 2rem;
 }
 
+#country-form-group {
+    display: none;
+}
+
 input:not([type=file], [type=radio]),
 select,
 textarea {
@@ -61,6 +65,7 @@ textarea {
     border-radius: var(--border-radius);
     padding: var(--padding);
     border: 1px solid gray;
+    height: 2.75rem;
 
     &:focus {
         outline: none;

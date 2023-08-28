@@ -14,11 +14,13 @@ class ContactController extends Controller
 {
     public function send_mail(Request $request)
     {
+        // return $request->all();
         $validated = $request->validate([
             // 'passport' => ['required', File::types(['jpg', 'jpeg', 'png'])->min(10)],
             'gov_rep' => ['required', 'max:1'],
-            'organization' => ['required', 'string', 'max:40'],
-            'designation' => ['required', 'string', 'max:40'],
+            'organization' => ['sometimes', 'nullable ', 'string', 'max:140'],
+            'country' => ['sometimes', 'nullable ', 'string', 'max:140'],
+            'designation' => ['required', 'string', 'max:140'],
             'country_code' => ['required', 'string', 'max:8'],
             'contact_no' => ['required', 'string', 'min:8', 'max:14'],
             'response_time' => ['required', 'string', 'max:140'],

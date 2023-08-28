@@ -14,7 +14,7 @@
             <p style="color: #1413139E;">
                 After sending the completed contact form you will receive a confirmation mail.
             </p>
-            <form class="form" action="/contact" method="post" enctype="multipart/form-data">
+            <form name="contactForm" class="form" action="/contact" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="form-group">
                     <label for="passport">Scan the Data page of your International Passport and upload it here: <span>*</span></label>
@@ -29,7 +29,15 @@
                     <span class="error" id="gov_rep_error">Choose one.</span>
                 </div>
                 <div class="row">
-                    <div class="col-12 col-md-6 form-group">
+                    <div id="country-form-group" class="col-12 col-md-6 form-group">
+                        <label for="organization">Country <span>*</span></label>
+                        <select name="country" id="country" value="{{ old('organization') }}" onchange="checkFormValidity('country', 'country')">
+                            <option value="">Select a Country</option>
+                        </select>
+                        <!-- <input type="text" name="organization" id="organization"> -->
+                        <span class="error" id="country_error">Name of country is required.</span>
+                    </div>
+                    <div id="organization-form-group" class="col-12 col-md-6 form-group">
                         <label for="organization">Name of Organisation <span>*</span></label>
                         <input type="text" name="organization" id="organization" value="{{ old('organization') }}">
                         <span class="error" id="organization_error">Name of organization is required.</span>

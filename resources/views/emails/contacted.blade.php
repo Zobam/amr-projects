@@ -73,9 +73,15 @@
             <p>
                 Are you representing a government: <span>{{$data->gov_rep?? ""}}</span>
             </p>
+            @if($data->gov_rep == 'Yes')
+            <p>
+                Name of country: <span>{{$data->country?? ""}}</span>
+            </p>
+            @else
             <p>
                 Name of organization: <span>{{$data->organization?? ""}}</span>
             </p>
+            @endif
             <p>Your designation: <span>{{$data->designation?? ""}}</span></p>
             <p>
                 Contact number: <span>{{$data->contact_no?? ""}}</span>

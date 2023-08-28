@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\WhitelistController;
 use App\Http\Middleware\EnsureIpNotBlackListed;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -31,8 +32,4 @@ Route::post('/contact', [ContactController::class, 'send_mail']);
 Route::get('/_', function () {
     return view('access-denied');
 });
-Route::get('/whitelist/{target_ip?}', function ($target_ip = null) {
-    return response()->json([
-        'target_ip' => $target_ip ?? null,
-    ]);
-});
+Route::get('/whitelist_blocked_ip/{target_ip?}', [WhitelistController::class, 'whitelist']);
