@@ -32,7 +32,7 @@ class ContactController extends Controller
         Log::warning($request->all());
 
         try {
-            // $recipients = ['amrprojects@proton.me', $request->email];
+            // $recipients = ['wr@amrprojects.com', $request->email];
             $recipients = ['chizoba@bexit.com.ng', $request->email];
 
             // put 'yes' or 'no' for 1 or 0
@@ -51,6 +51,7 @@ class ContactController extends Controller
         } catch (Exception $e) {
             Log::info('an error occurred');
             Log::warning($e);
+            $request->session()->flash('status', 'error');
             return back()->withInput();
         } finally {
             // delete the passport image

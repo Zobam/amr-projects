@@ -2,6 +2,12 @@
     <section>
         <div class="">
             <h1>Contact Form</h1>
+            @if(session()->has('status'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>An error occurred.</strong> Please, try again later.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            @endif
             @if ($errors->any())
             <div class="alert alert-danger" style="margin: 1rem 0rem; border: 2px solid red; border-radius: 1rem">
                 <ul>

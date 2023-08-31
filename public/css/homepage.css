@@ -16,7 +16,7 @@ main {
 }
 
 main>section {
-    width: min(90%, 40rem);
+    width: min(90%, 50rem);
     margin: auto;
 }
 

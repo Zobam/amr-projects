@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>{{ $title?? 'AMR :: Project Consultancy at its finest.'}}</title>
+    <title>{{ $title?? 'AMR :: Project Consultancy'}}</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
