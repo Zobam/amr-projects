@@ -50,7 +50,7 @@ class ContactReceived extends Mailable
      */
     public function attachments(): array
     {
-        if ($this->data->is_pdf) {
+        if ($this->data->is_pdf && !$this->data->to_guest) {
             return [
                 Attachment::fromPath($this->data->passport_link)->as('passport')->withMime('application/pdf'),
             ];
