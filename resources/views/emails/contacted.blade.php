@@ -13,7 +13,7 @@
         }
 
         body {
-            background-color: black;
+            background-color: #ededed;
             font-size: 100%;
             max-width: 100%;
             overflow-x: hidden;

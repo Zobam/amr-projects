@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\ContactReceived;
+use App\Mail\TestEmail;
 use Exception;
 use Illuminate\Support\Facades\Log;
 
@@ -63,6 +64,21 @@ class ContactController extends Controller
     {
         if (file_exists($link)) {
             unlink($link);
+        }
+    }
+    public function test_mail(Request $request)
+    {
+        $validated = $request->validate([
+            'email' => ['required', 'email'],
+        ]);
+        if ($request->has('email')) {
+            Mail::to($request->email)->send(new TestEmail());
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Email sent to ' . $request->email
+            ]);
+        } else {
+            return "email not found";
         }
     }
 }

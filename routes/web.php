@@ -4,6 +4,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\WhitelistController;
 use App\Http\Middleware\EnsureIpNotBlackListed;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
@@ -33,3 +34,17 @@ Route::get('/_', function () {
     return view('access-denied');
 });
 Route::get('/whitelist_blocked_ip/{target_ip?}', [WhitelistController::class, 'whitelist']);
+
+Route::get('/send-email', [ContactController::class, 'test_mail']);
+
+
+//Clear Cache facade value:
+Route::get('/clear-cache', function () {
+    Artisan::call('cache:clear');
+    Artisan::call('optimize');
+    Artisan::call('route:cache');
+    Artisan::call('route:clear');
+    Artisan::call('view:clear');
+    Artisan::call('config:cache');
+    return '<h1>Clear Config cleared</h1>';
+});
