@@ -361,24 +361,27 @@ class VerifyPassportController extends Controller
             $passport_link =  $save_dir . $image_name;
             // submit passport to mindee api
             $result = $this->submitPassportToApi($passport_link);
-            $response = [
-                'status' => 'success',
-                'message' => 'Passport passed verification check.',
-                'passport_link' => $passport_link,
-            ];
+            $response = [];
             if (is_array($result)) {
-                $prediction = $result['document']['inference']['prediction'];
-                if (!$this->checkPassportValidity($prediction)) {
+                // $prediction = $result['document']['inference']['prediction'];
+                if (!array_key_exists('document', $result) || !$this->checkPassportValidity($result['document']['inference']['prediction'])) {
                     $response['status'] = 'error';
                     $response['error_code'] = ErrorCodes::FailedVerification->value;
                     $response['message'] = 'Passport failed verification check.';
-                    // blacklist ip if this is the 3rd failed attempt
+                    // notify AMR if this is the 3rd failed attempt
                     if ($request->verification_attempts >= 2) {
-                        $this->blacklist($request->ip());
+                        $this->notifyAMR($request->ip());
                         $response['error_code'] = ErrorCodes::IPBlackListed->value;
                     }
                     // delete passport if it failed validity check
                     $this->delete_passport($passport_link);
+                }
+                if ($this->checkPassportValidity($result['document']['inference']['prediction'])) {
+                    $response = [
+                        'status' => 'success',
+                        'message' => 'Passport passed verification check.',
+                        'passport_link' => $passport_link,
+                    ];
                 }
             } else {
                 $response['status'] = 'error';
@@ -391,38 +394,12 @@ class VerifyPassportController extends Controller
         }
         return $response;
     }
-    public function blacklist($ip_address)
-    {
-        if (!$this->checkIfBlacklisted($ip_address)) {
-            try {
-                $blacklist = fopen(public_path('blacklist.txt'), 'a');
-                $lineText = "$ip_address\n";
-                fwrite($blacklist, $lineText);
-                fclose($blacklist);
-                // send failed attempts email to amr
-                Mail::to("upc4you@gmail.com")->send(new FailedAttempts($ip_address));
-                return true;
-            } catch (Exception $e) {
-                return false;
-            }
-        } else {
-            return false;
-        }
-    }
-    public function checkIfBlacklisted($ip_address)
+    public function notifyAMR($ip_address)
     {
         try {
-            $blacklist = fopen(public_path('blacklist.txt'), 'r');
-            $already_blacklisted = false;
-            while (!feof($blacklist)) {
-                $currentLine = fgets($blacklist);
-                // Log::info($currentLine);
-                if (strpos($currentLine, $ip_address) !== false) {
-                    $already_blacklisted = true;
-                    break;
-                }
-            }
-            return $already_blacklisted;
+            // send failed attempts email to amr
+            Mail::to("wr@amrprojects.com")->send(new FailedAttempts($ip_address));
+            return true;
         } catch (Exception $e) {
             return false;
         }
