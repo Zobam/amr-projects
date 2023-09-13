@@ -107,7 +107,7 @@
             </form>
         </div>
     </section>
-    <script src="{{asset('/js/contact.js')}}"></script>
+    <script src="{{asset('/js/contact1.js')}}"></script>
     <script src="{{asset('/js/validation.js')}}"></script>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <script>

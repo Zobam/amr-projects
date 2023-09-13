@@ -44,8 +44,6 @@
         }
 
         section {
-            color: yellow;
-            background-color: black;
             padding: .75rem;
             width: 100%;
         }

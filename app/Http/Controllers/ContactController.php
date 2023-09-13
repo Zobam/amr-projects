@@ -59,6 +59,8 @@ class ContactController extends Controller
         } finally {
             // delete the passport image
             $this->delete_passport($request->passport_link);
+            // delete uploaded images that has stayed more than a day
+            $this->delete_files();
         }
     }
     // handle the deletion of the passport image
@@ -81,6 +83,28 @@ class ContactController extends Controller
             ]);
         } else {
             return "email not found";
+        }
+    }
+    public function delete_files()
+    {
+        $dir = 'images/email';
+        if ($handle = opendir($dir)) {
+            /* This is the correct way to loop over the directory. */
+            while (false !== ($entry = readdir($handle))) {
+                if ($entry != '..' && $entry != '.') {
+                    $file = $dir . '/' . $entry;
+                    if (file_exists($file)) {
+                        $time = filemtime($file);
+                        $now = time();
+                        $days_past = round(($now - $time) / (60 * 60 * 24), 2);
+                        // delete the file if it was uploaded more than a day ago
+                        if ($days_past >= 1) {
+                            unlink($file);
+                        }
+                    }
+                }
+            }
+            closedir($handle);
         }
     }
 }

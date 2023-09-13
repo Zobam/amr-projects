@@ -9,10 +9,6 @@ let verifyingElem = document.getElementById('verifying');
 let passportLink;
 let verificationAttempts = 0;
 let isGovRep = false;
-// update verification attempts from local storage if it exist
-if (localStorage.getItem("verificationAttempts") !== null) {
-    verificationAttempts = Number(localStorage.getItem("verificationAttempts"));
-}
 // respond to focusing on country code field and typing on it
 codeInput.addEventListener('focus', filterCodes);
 codeInput.addEventListener('keyup', filterCodes);
@@ -101,11 +97,6 @@ function updateResponseText(text) {
     verifyingElem.innerHTML = text;
 }
 
-// redirect if attempts reached limit
-if (verificationAttempts > 2) {
-    location = '/_';
-}
-
 // verifyPassport
 function verifyPassport() {
 
@@ -135,7 +126,7 @@ function verifyPassport() {
         let data = new FormData();
         data.append("passport", guestPassport, guestPassport.name);
         data.append('verification_attempts', verificationAttempts);
-        axios.post('http://127.0.0.1:8000/api/verify_passport', data).then(response => {
+        axios.post(location.origin + '/api/verify_passport', data).then(response => {
             // console.log('back from mindee api');
             console.log(response.data);
             if (response.data.status == 'success') {
@@ -147,28 +138,22 @@ function verifyPassport() {
                 contactForm.passport = true;
                 // disable passport input element
                 passportInput.setAttribute('disabled', true);
-                // increment verification attempts and save in local storage
-                verificationAttempts++;
-                localStorage.setItem("verificationAttempts", verificationAttempts);
 
                 checkFormValidity('email', 'email');
             } else {
-                if (response.data?.error_code == '002') {
-                    location = '/_';
-                } else {
-                    if (response.data?.error_code == '001') {
-                        let remainingAttempts = 3 - verificationAttempts - 1;
-                        if (remainingAttempts < 0) remainingAttempts = 0;
-                        updateResponseText(`The uploaded document is not a passport.<p>You have ${remainingAttempts} attempts left. After <strong>three(3)</strong> failed attempts, you will be blocked from this site.</p>`);
-                        disableForm();
-                        addClass(verifyingElem, 'error');
-                        // increment verification attempts and save in local storage
-                        verificationAttempts++;
-                        localStorage.setItem("verificationAttempts", verificationAttempts);
+                if (response.data?.error_code == '002' || response.data?.error_code == '001') { //ip blacklisted
+                    // location = '/_';
+                    if (response.data?.error_code == '002') {
+                        verificationAttempts = 0;
                     } else {
-                        updateResponseText("An error occurred. Please try again.");
-                        addClass(verifyingElem, 'error');
+                        verificationAttempts++;
                     }
+                    updateResponseText(`The uploaded document is not a passport.`);
+                    disableForm();
+                    addClass(verifyingElem, 'error');
+                } else {
+                    updateResponseText("An error occurred. Please try again.");
+                    addClass(verifyingElem, 'error');
                     passportInput.value = null;
                 }
             }

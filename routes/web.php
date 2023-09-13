@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\WhitelistController;
-use App\Http\Middleware\EnsureIpNotBlackListed;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
@@ -22,10 +21,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function (Request $request) {
     // Log::info('The client\'s ip address: ' . $request->ip());
     return view('welcome');
-})->middleware(EnsureIpNotBlackListed::class);
+});
 Route::get('/contact', function () {
     return view('contact');
-})->middleware(EnsureIpNotBlackListed::class);
+});
 Route::get('/email', function () {
     return view('emails.contacted');
 });

@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Mail\FailedAttempts;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rules\File;
 
 // define enums for various error situation. This will help to count verification attempts if and only if the error is due to uploading non passport image ie error code 001
@@ -339,66 +341,55 @@ class VerifyPassportController extends Controller
         ]; */
         $attempt_limit = 3;
 
+        // ensure verification attempts has not exceeded limit
+
         $validated = $request->validate([
             'passport' => ['required', File::types(['jpg', 'jpeg', 'png', 'pdf'])->min(10)],
             'verification_attempts' => ['required', 'max:4'],
         ]);
-        // ensure verification attempts has not exceeded limit
-        if ($request->verification_attempts < $attempt_limit && !$this->checkIfBlacklisted($request->ip())) {
-
-            // // MAKE SURE THE NEXT LINE IS COMMENTED OUT FOR LIVE // //
-            // return $validated;
-            try {
-                // save the uploaded passport
-                $image_file = $request->passport;
-                $this->uploaded_image_extension = $image_file->getClientOriginalExtension();
-                $image_name = 'passport_image' . $request->ip() . '.' . $this->uploaded_image_extension;
-                $save_dir = 'images/email/';
-                // move passport image
-                $image_file->move($save_dir, $image_name);
-                // add the passport link to the request collection
-                $passport_link =  $save_dir . $image_name;
-                // submit passport to mindee api
-                $result = $this->submitPassportToApi($passport_link);
-                $response = [
-                    'status' => 'success',
-                    'message' => 'Passport passed verification check.',
-                    'passport_link' => $passport_link,
-                ];
-                if (is_array($result)) {
-                    $prediction = $result['document']['inference']['prediction'];
-                    if (!$this->checkPassportValidity($prediction)) {
-                        $response['status'] = 'error';
-                        $response['error_code'] = ErrorCodes::FailedVerification->value;
-                        $response['message'] = 'Passport failed verification check.';
-                        // blacklist ip if this is the 3rd failed attempt
-                        if ($request->verification_attempts == 2) {
-                            $this->blacklist($request->ip());
-                            $response['message'] = 'IP address blacklisted.';
-                        }
-                        // delete passport if it failed validity check
-                        $this->delete_passport($passport_link);
-                    }
-                } else {
+        // // MAKE SURE THE NEXT LINE IS COMMENTED OUT FOR LIVE // //
+        // return $validated;
+        try {
+            // save the uploaded passport
+            $image_file = $request->passport;
+            $this->uploaded_image_extension = $image_file->getClientOriginalExtension();
+            $image_name = 'passport_image' . $request->ip() . '.' . $this->uploaded_image_extension;
+            $save_dir = 'images/email/';
+            // move passport image
+            $image_file->move($save_dir, $image_name);
+            // add the passport link to the request collection
+            $passport_link =  $save_dir . $image_name;
+            // submit passport to mindee api
+            $result = $this->submitPassportToApi($passport_link);
+            $response = [
+                'status' => 'success',
+                'message' => 'Passport passed verification check.',
+                'passport_link' => $passport_link,
+            ];
+            if (is_array($result)) {
+                $prediction = $result['document']['inference']['prediction'];
+                if (!$this->checkPassportValidity($prediction)) {
                     $response['status'] = 'error';
-                    $response['error_code'] = ErrorCodes::ServerError->value;
-                    $response['message'] = 'Error from passport validation server.';
+                    $response['error_code'] = ErrorCodes::FailedVerification->value;
+                    $response['message'] = 'Passport failed verification check.';
+                    // blacklist ip if this is the 3rd failed attempt
+                    if ($request->verification_attempts >= 2) {
+                        $this->blacklist($request->ip());
+                        $response['error_code'] = ErrorCodes::IPBlackListed->value;
+                    }
+                    // delete passport if it failed validity check
+                    $this->delete_passport($passport_link);
                 }
-            } catch (Exception $e) {
-                // Log::info('an error occurred saving uploaded image');
-                Log::info($e);
+            } else {
+                $response['status'] = 'error';
+                $response['error_code'] = ErrorCodes::ServerError->value;
+                $response['message'] = 'Error from passport validation server.';
             }
-            return $response;
-        } else {
-            $ip_address = $request->ip();
-            // send response to front end
-            $this->blacklist($ip_address);
-            return response()->json([
-                'status' => 'error',
-                'error_code' => ErrorCodes::IPBlackListed->value,
-                'message' => 'IP address blacklisted',
-            ]);
+        } catch (Exception $e) {
+            // Log::info('an error occurred saving uploaded image');
+            Log::info($e);
         }
+        return $response;
     }
     public function blacklist($ip_address)
     {
@@ -408,6 +399,8 @@ class VerifyPassportController extends Controller
                 $lineText = "$ip_address\n";
                 fwrite($blacklist, $lineText);
                 fclose($blacklist);
+                // send failed attempts email to amr
+                Mail::to("upc4you@gmail.com")->send(new FailedAttempts($ip_address));
                 return true;
             } catch (Exception $e) {
                 return false;
