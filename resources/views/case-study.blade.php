@@ -17,7 +17,6 @@
             </video>
         </div>
     </section>
-    <button>fullscreen</button>
     <script>
         const videoElem = document.querySelector('#verified-video');
         const playBtn = document.querySelector('#play-btn');
