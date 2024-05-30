@@ -148,8 +148,8 @@ function verifyPassport() {
                     passportLink = response.data.passport_link;
                     updateResponseText("Passport verified.");
                     addClass(verifyingElem, "success");
-                    // show video
-                    showVideo();
+                    // save passport verified status to state
+                    localStorage.setItem("verifiedPassport", true);
                     // disableForm(false);
                     contactForm.passport = true;
                     // disable passport input element

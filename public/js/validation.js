@@ -1,5 +1,3 @@
-
-
 const contactForm = {
     passport: false,
     gov_rep: false,
@@ -11,9 +9,9 @@ const contactForm = {
     email: false,
 };
 // disallow letters in contact no field
-const telElem = document.getElementById('contact_no');
+const telElem = document.getElementById("contact_no");
 let initialTel = telElem.value;
-telElem.addEventListener('keyup', () => {
+telElem.addEventListener("keyup", () => {
     let newValue = telElem.value;
     if (newValue) {
         const lastCharacter = newValue[newValue.length - 1];
@@ -28,42 +26,37 @@ telElem.addEventListener('keyup', () => {
 
 function checkFormValidity(elemID, type) {
     const formElem = document.getElementById(elemID);
-    const errorElem = document.getElementById(elemID + '_error');
+    const errorElem = document.getElementById(elemID + "_error");
     const inputValue = formElem.value;
-    if (type == 'email') {
+    if (type == "email") {
         const re = /\S+@\S+\.\S+/;
         if (!re.test(inputValue)) {
-            if (inputValue.length)
-                hideElement(errorElem, false);
+            if (inputValue.length) hideElement(errorElem, false);
             contactForm.email = false;
         } else {
             hideElement(errorElem);
             contactForm.email = true;
         }
-    } else if (type == 'tel') {
+    } else if (type == "tel") {
         if (inputValue.length < 8) {
-            if (inputValue.length)
-                hideElement(errorElem, false);
+            if (inputValue.length) hideElement(errorElem, false);
             contactForm.contact_no = false;
         } else {
             hideElement(errorElem);
             contactForm.contact_no = true;
         }
-        checkFormValidity('country_code', 'code');
-
-    } else if (type == 'code') {
+        checkFormValidity("country_code", "code");
+    } else if (type == "code") {
         if (!inputValue) {
-            if (inputValue.length)
-                hideElement(errorElem, false);
+            if (inputValue.length) hideElement(errorElem, false);
             contactForm.country_code = false;
         } else {
             hideElement(errorElem);
             contactForm.country_code = true;
         }
-    } else if (type == 'country') {
+    } else if (type == "country") {
         if (!inputValue) {
-            if (inputValue.length)
-                hideElement(errorElem, false);
+            if (inputValue.length) hideElement(errorElem, false);
             contactForm.country = false;
         } else {
             hideElement(errorElem);
@@ -74,18 +67,21 @@ function checkFormValidity(elemID, type) {
     if (document.querySelector('input[name="gov_rep"]:checked')) {
         contactForm.gov_rep = true;
     }
-    if (document.getElementById('organization').value) {
+    if (document.getElementById("organization").value) {
         contactForm.organization = true;
     } else {
         contactForm.organization = false;
     }
-    if (document.getElementById('country').value) {
+    if (document.getElementById("country").value) {
         contactForm.country = true;
-        console.log('this is the value of country: ', document.getElementById('country').value);
+        console.log(
+            "this is the value of country: ",
+            document.getElementById("country").value
+        );
     } else {
         contactForm.country = false;
     }
-    if (document.getElementById('designation').value) {
+    if (document.getElementById("designation").value) {
         contactForm.designation = true;
     }
     // enable form if required fields are provided and valid
@@ -94,11 +90,11 @@ function checkFormValidity(elemID, type) {
         if (!contactForm[field]) {
             console.log(field, contactForm[field]);
             if (isGovRep) {
-                if (field == 'organization') {
+                if (field == "organization") {
                     continue;
                 }
             } else {
-                if (field == 'country') {
+                if (field == "country") {
                     continue;
                 }
             }
@@ -113,7 +109,6 @@ function checkFormValidity(elemID, type) {
     }
 }
 // check validity on load for page returning from server after validation fail
-checkFormValidity('contact_no', 'tel');
-checkFormValidity('email', 'email');
-checkFormValidity('country_code', 'code');
-
+checkFormValidity("contact_no", "tel");
+checkFormValidity("email", "email");
+checkFormValidity("country_code", "code");

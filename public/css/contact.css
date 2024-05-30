@@ -73,7 +73,7 @@ textarea {
 }
 
 
-button {
+button#submit-btn {
     width: 100%;
     padding: var(--padding);
     color: white;
@@ -97,6 +97,11 @@ nav a {
 
     &.active {
         color: black;
+    }
+}
+nav a.disabled {
+    &:hover {
+        color: #A79B9B !important;
     }
 }
 

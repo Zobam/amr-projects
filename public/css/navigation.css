@@ -22,3 +22,56 @@ nav a {
         /* font-size: 1.5rem; */
     }
 }
+nav a.disabled {
+
+    &:hover {
+        color: #A79B9B;
+        /* font-size: 1.5rem; */
+    }
+}
+
+nav button.menu {
+    display: none;
+    /* color: rgb(237, 237, 237); */
+}
+
+nav a#case-study-link.disabled{
+    cursor: not-allowed;
+}
+
+@media screen and (max-width: 564px) {
+    nav {
+        position: relative;
+        /* border: 1px solid rgb(255, 204, 0); */
+    }
+
+    nav ul {
+        display: none;
+        border: 1px solid rgb(212, 212, 232);
+        background-color: rgb(255, 255, 255);
+        max-width: 13rem;
+        position: absolute;
+        top: 4rem;
+        right: .25rem;
+        z-index: 1900;border: 1px solid rgb(255, 204, 0);
+        margin: 0px;
+        padding: 1rem;
+    }
+
+    nav button.menu {
+        display: inline-block;
+        position: absolute;
+        right: .25rem;
+        border: none;
+        padding: .25rem;
+        box-shadow: 1px 1px 2px gray;
+        z-index: 9;
+    }
+}
+
+.mobile-nav {
+    display: block;
+}
+.hide{
+    display: none;
+}

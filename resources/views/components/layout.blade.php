@@ -14,6 +14,7 @@
     <!-- Styles -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="{{ asset('css/main.css') }}" rel="stylesheet">
     <link href="{{ asset('css/navigation.css') }}" rel="stylesheet">
     <link href="{{ asset($styleLink ?? 'css/main.css') }}" rel="stylesheet">
@@ -35,7 +36,7 @@
     </main>
     <section id="video-container">
         <iframe width="560" height="315"
-            src="https://www.youtube.com/embed/wZ4sPUcdlO4?si=3-cbphNlvXUgr0lQ&autoplay=1&mute=1"
+            src="https://www.youtube.com/embed/z5_CtQ09snM?si=zdNNLpEtNF5_gjXM&autoplay=1&mute=1"
             title="YouTube video player" frameborder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
@@ -47,18 +48,20 @@
         const closeBtn = document.querySelector('.close-btn');
         const videoContainer = document.querySelector('#video-container');
         // don't play video again if user has watched it
-        if (localStorage.getItem('watchedVideo') == 'true') {
+        console.log(window.location.pathname);
+        if (localStorage.getItem('watchedVideo') == 'true' && (window.location.pathname != '/intro')) {
             videoContainer.style.display = 'none';
             document.body.classList.remove('fix-scroll');
         }
+        // close the video
         closeBtn.addEventListener('click', function() {
             videoContainer.style.display = 'none';
             document.body.classList.remove('fix-scroll');
             localStorage.setItem('videoClosed', true);
-            setTimeout(() => {
-                localStorage.setItem('videoClosed', null);
-                localStorage.setItem('watchedVideo', true);
-            }, 2000);
+
+            localStorage.setItem('videoClosed', null);
+            localStorage.setItem('watchedVideo', true);
+            window.location = '/';
         });
 
         const duration = 4;

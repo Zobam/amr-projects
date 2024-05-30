@@ -1,0 +1,106 @@
+:root {
+    --padding: .5rem;
+    --border-radius: .5rem;
+}
+
+nav {
+    opacity: 1;
+}
+
+body {}
+
+main {
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
+}
+
+main>section {
+    background-color: #fffffff3;
+}
+
+main>section>div {
+    width: min(90%, 40rem);
+    margin: auto;
+    padding: 1rem 0rem;
+}
+
+h1 {
+    text-transform: uppercase;
+    font-family: 'Optima Bold';
+    font-size: 1.8rem;
+}
+
+
+
+nav a {
+    &:hover {
+        color: black !important;
+    }
+
+    &.active {
+        color: black;
+    }
+}
+
+
+section#side-video {
+    /* border: 1px solid green; */
+    width: 100%;
+    margin-top: 1rem;
+
+    &>div {
+        /* border: 1px solid red; */
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+section#side-video video {
+    /* width: min(100%, 760px); */
+    height: 100dvh;
+    aspect-ratio: 1.8 / 1;
+    border: 1px solid rgba(89, 90, 89, 0.149);
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+section#side-video button {
+    position: absolute;
+    background-color: red;
+    max-width: 6rem;
+    top: -2.5rem;
+    left: 0px;
+
+    &:hover {
+        background-color: rgb(112, 6, 6);
+    }
+}
+
+button#watch-again-btn {
+    border: 2px solid #7c7c7c;
+    background-color: #fff;
+    color: #7c7c7c;
+    display: none;
+
+    &:hover {
+        background-color: #434343;
+        color: #fff;
+    }
+}
+
+section#custom-video {
+    border: 1px solid red;
+    display: flex;
+    justify-content: center;
+}
+
+.fullscreen {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+}

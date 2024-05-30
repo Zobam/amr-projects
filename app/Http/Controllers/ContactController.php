@@ -16,7 +16,7 @@ class ContactController extends Controller
     public function send_mail(Request $request)
     {
         // return $request->all();
-        $validated = $request->validate([
+        $request->validate([
             // 'passport' => ['required', File::types(['jpg', 'jpeg', 'png'])->min(10)],
             'gov_rep' => ['required', 'max:1'],
             'organization' => ['sometimes', 'nullable ', 'string', 'max:140'],
@@ -33,8 +33,8 @@ class ContactController extends Controller
         Log::warning($request->all());
 
         try {
-            $recipients = ['wr@amrprojects.com', $request->email];
-            // $recipients = ['chizoba@bexit.com.ng', $request->email];
+            // $recipients = ['wr@amrprojects.com', $request->email];
+            $recipients = ['chizoba@bexit.com.ng', $request->email];
 
             // put 'yes' or 'no' for 1 or 0
             $request['gov_rep'] = $request->gov_rep == 1 ? 'Yes' : 'No';
@@ -50,7 +50,7 @@ class ContactController extends Controller
                 Mail::to($recipient)->send(new ContactReceived($request));
             }
             $request->session()->flash('status', 'success');
-            return redirect('/');
+            return redirect('/case-study');
         } catch (Exception $e) {
             Log::info('an error occurred');
             Log::warning($e);

@@ -3,10 +3,13 @@ body {
     background-image: url('/images/amr-background-carbon-variant-scaled.jpg');
     background-repeat: no-repeat;
     background-size: cover;
+    /* border: 1px solid red; */
 }
 
 nav {
     background-color: rgba(0, 0, 0, 0.557);
+}
+nav a{
     opacity: 0;
 }
 

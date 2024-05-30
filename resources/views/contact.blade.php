@@ -115,14 +115,16 @@
                     <div class="g-recaptcha" data-sitekey="6Lel4Z4UAAAAAOa8LO1Q9mqKRUiMYl_00o5mXJrR"></div>
                     <span class="error" id="recaptcha_error">Please, verify that you are human.</span>
                 </div>
-                <div class="d-flex justify-content-center mt-4">
+                <p class="text-center mt-4" style="color: green">Once submitted, you will have access to watch the
+                    Case
+                    Study video</p>
+                <div class="d-flex justify-content-center">
                     <button id="submit-btn" disabled>Send</button>
                 </div>
             </form>
-            <button id="watch-again-btn" class="mt-4">Watch Video Again</button>
         </div>
     </section>
-    <section id="side-video">
+    {{-- <section id="side-video">
         <button id="close-btn">X Close</button>
         <video id="verified-video" width="320" height="240" controls>
             <source
@@ -132,7 +134,7 @@
             Your browser does not support the video tag.
         </video>
     </section>
-    {{-- <section id="custom-video">
+    <section id="custom-video">
         <video width="320" height="240" autoplay muted>
             <source
                 src="https://firebasestorage.googleapis.com/v0/b/rutride-fb-d85a7.appspot.com/o/Laravel%20Multi-Step%20Validation%20with%20DB%20Transactions.mp4?alt=media&token=6aed94a1-4a44-4816-9b6b-4bf01f1947a1"
@@ -180,5 +182,7 @@
             videoElement.muted = false;
             closeSideBtn.scrollIntoView();
         }
+        // test
+        // localStorage.setItem('verifiedPassport', true);
     </script>
 </x-layout>

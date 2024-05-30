@@ -22,6 +22,12 @@ Route::get('/', function (Request $request) {
     // Log::info('The client\'s ip address: ' . $request->ip());
     return view('welcome');
 });
+Route::get('/intro', function () {
+    return view('intro');
+});
+Route::get('/case-study', function () {
+    return view('case-study');
+});
 Route::get('/contact', function () {
     return view('contact');
 });
