@@ -6,7 +6,7 @@
         </div>
     @endif
     <section id="side-video">
-        <div class="" style="">
+        <div class="">
             <button id="close-btn">X Close</button>
             <video id="verified-video" controls autoplay muted>
                 <source
@@ -17,6 +17,7 @@
             </video>
         </div>
     </section>
+    <button>fullscreen</button>
     <script>
         const videoElem = document.querySelector('#verified-video');
         const playBtn = document.querySelector('#play-btn');
@@ -42,9 +43,8 @@
             }, 3000);
         }
 
-        /* const cordinates = videoElem.getBoundingClientRect();
-
         function positionVideo() {
+            const cordinates = videoElem.getBoundingClientRect();
 
             console.log(cordinates);
             const spaceBelow = window.innerHeight - cordinates.y - cordinates.height;
@@ -58,6 +58,6 @@
         positionVideo();
         window.addEventListener('resize', function() {
             positionVideo();
-        }); */
+        });
     </script>
 </x-layout>

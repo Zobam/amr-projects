@@ -59,13 +59,9 @@ section#side-video {
 }
 
 section#side-video video {
-    /* width: min(100%, 760px); */
-    height: 100dvh;
+    width: min(100%, 760px);
     aspect-ratio: 1.8 / 1;
     border: 1px solid rgba(89, 90, 89, 0.149);
-    position: absolute;
-    top: 0px;
-    left: 0px;
 }
 
 section#side-video button {
@@ -96,11 +92,4 @@ section#custom-video {
     border: 1px solid red;
     display: flex;
     justify-content: center;
-}
-
-.fullscreen {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    width: 100%;
 }
