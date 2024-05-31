@@ -6,22 +6,26 @@
         </div>
     @endif
     <section id="side-video">
-        <div class="">
+        <div id="verified-video-container">
             <button id="close-btn">X Close</button>
             <video id="verified-video" controls autoplay muted>
                 <source
-                    src="https://firebasestorage.googleapis.com/v0/b/rutride-fb-d85a7.appspot.com/o/AMR%20VO%20Clip%202_01-002.mp4?alt=media&token=36737cea-f221-4149-9a80-5080e598d467"
+                    src="https://firebasestorage.googleapis.com/v0/b/rutride-fb-d85a7.appspot.com/o/AMR_case-study.mp4?alt=media&token=36632954-c710-45af-9586-ef45917ae31c"
                     type="video/mp4">
                 <source src="movie.ogg" type="video/ogg">
                 Your browser does not support the video tag.
             </video>
         </div>
     </section>
+    <button id="showFullscreenBtn">X Close video</button>
     <script>
+        const verifiedVideoContainer = document.querySelector('#verified-video-container');
         const videoElem = document.querySelector('#verified-video');
         const playBtn = document.querySelector('#play-btn');
         const bodyElem = document.querySelector('body');
         const alertElem = document.querySelector('div.alert');
+        const showFullscreenBtn = document.querySelector('#showFullscreenBtn');
+        showFullscreenBtn.addEventListener('click', customFullscreen);
         // setTimeout(() => playBtn.click(), 2000);
         /* bodyElem.addEventListener('mouseover', () => {
             videoElem.muted = false;
@@ -42,8 +46,9 @@
             }, 3000);
         }
 
+        const cordinates = videoElem.getBoundingClientRect();
+
         function positionVideo() {
-            const cordinates = videoElem.getBoundingClientRect();
 
             console.log(cordinates);
             const spaceBelow = window.innerHeight - cordinates.y - cordinates.height;
@@ -54,9 +59,34 @@
                 videoElem.style.marginTop = '1rem';
             }
         }
-        positionVideo();
+
         window.addEventListener('resize', function() {
             positionVideo();
         });
+
+        // custom fullscreen
+        makeFull = true;
+
+        function customFullscreen() {
+            if (makeFull) {
+                verifiedVideoContainer.classList.add('fullscreen');
+                // set video width
+                let videoWidth = window.innerWidth;
+                let videoHeight = window.innerHeight;
+                if (videoWidth > videoHeight) {
+                    videoWidth = videoHeight * 1.8;
+                    videoElem.style.width = `${videoWidth}px`;
+                }
+                showFullscreenBtn.style.display = 'block';
+            } else {
+                verifiedVideoContainer.classList.remove('fullscreen');
+                videoElem.style.width = `${cordinates.width}px`;
+                positionVideo();
+                showFullscreenBtn.style.display = 'none';
+            }
+            makeFull = !makeFull;
+        }
+
+        customFullscreen();
     </script>
 </x-layout>

@@ -1,7 +1,7 @@
 <x-layout styleLink='css/homepage.css'>
     <section>
         <div class="d-flex justify-content-center">
-            <img src="/images/AMR-PC-yellow-1-min.png" id="amr-logo" alt="amr logo">
+            <img src="/images/amr-updated-logo.png" id="amr-logo" alt="amr logo">
         </div>
         <div class="p-content" style="opacity: 0;">
             <p>Welcome to AMR Project Consultancy</p>

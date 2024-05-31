@@ -22,6 +22,7 @@ nav a {
         /* font-size: 1.5rem; */
     }
 }
+
 nav a.disabled {
 
     &:hover {
@@ -35,7 +36,7 @@ nav button.menu {
     /* color: rgb(237, 237, 237); */
 }
 
-nav a#case-study-link.disabled{
+nav a#case-study-link.disabled {
     cursor: not-allowed;
 }
 
@@ -53,7 +54,8 @@ nav a#case-study-link.disabled{
         position: absolute;
         top: 4rem;
         right: .25rem;
-        z-index: 1900;border: 1px solid rgb(255, 204, 0);
+        z-index: 19;
+        border: 1px solid rgb(255, 204, 0);
         margin: 0px;
         padding: 1rem;
     }
@@ -65,13 +67,14 @@ nav a#case-study-link.disabled{
         border: none;
         padding: .25rem;
         box-shadow: 1px 1px 2px gray;
-        z-index: 9;
+        z-index: 1;
     }
 }
 
 .mobile-nav {
     display: block;
 }
-.hide{
+
+.hide {
     display: none;
 }
