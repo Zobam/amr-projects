@@ -9,6 +9,9 @@
                     class="icon">
                     <i class="fa fa-lock"></i>
                 </span> </a>
+            <div class="toast">
+                Fill out the contact form to have <strong>access</strong> to the Case Study <span></span>
+            </div>
         </li>
     </ul>
     <script>
@@ -17,6 +20,7 @@
         const navElem = document.querySelector('nav');
         const menuIcon = document.querySelector('button i.fa');
         const caseStudyLink = document.querySelector('#case-study-link');
+        const toastSpan = document.querySelector('.toast');
 
         menuBtn.addEventListener('click', function() {
             console.log(navUl.style.display, 'clicked');
@@ -44,6 +48,10 @@
         // prevent navigation when disabled link is clicked
         caseStudyLink.addEventListener('click', (e) => {
             if (!localStorage.getItem('verifiedPassport')) {
+                toastSpan.style.display = 'inline-block';
+                setTimeout(() => {
+                    toastSpan.style.display = null;
+                }, 7490);
                 e.preventDefault();
                 return;
             }

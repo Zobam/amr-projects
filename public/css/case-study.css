@@ -108,3 +108,7 @@ section#custom-video {
         /* min-width: 82%; */
     }
 }
+
+.menu {
+    top: 4rem;
+}

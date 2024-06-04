@@ -17,7 +17,7 @@
             </video>
         </div>
     </section>
-    <button id="showFullscreenBtn">X Close video</button>
+    <a href="/"><button id="showFullscreenBtn">X Close video</button></a>
     <script>
         const verifiedVideoContainer = document.querySelector('#verified-video-container');
         const videoElem = document.querySelector('#verified-video');
@@ -25,7 +25,7 @@
         const bodyElem = document.querySelector('body');
         const alertElem = document.querySelector('div.alert');
         const showFullscreenBtn = document.querySelector('#showFullscreenBtn');
-        showFullscreenBtn.addEventListener('click', customFullscreen);
+        // showFullscreenBtn.addEventListener('click', customFullscreen);
         // setTimeout(() => playBtn.click(), 2000);
         /* bodyElem.addEventListener('mouseover', () => {
             videoElem.muted = false;
@@ -79,6 +79,8 @@
                 }
                 showFullscreenBtn.style.display = 'block';
             } else {
+                window.location = '/';
+
                 verifiedVideoContainer.classList.remove('fullscreen');
                 videoElem.style.width = `${cordinates.width}px`;
                 positionVideo();
