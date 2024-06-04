@@ -1,6 +1,6 @@
 body {
-    background-color: gray;
-    background-image: url('/images/amr-background-carbon-variant-scaled.jpg');
+    background-color: rgb(26, 26, 26);
+    /* background-image: url('/images/amr-background-carbon-variant-scaled.jpg'); */
     background-repeat: no-repeat;
     background-size: cover;
     /* border: 1px solid red; */
@@ -9,7 +9,8 @@ body {
 nav {
     background-color: rgba(0, 0, 0, 0.557);
 }
-nav a{
+
+nav a {
     opacity: 0;
 }
 
@@ -19,7 +20,7 @@ main {
 }
 
 main>section {
-    width: min(90%, 50rem);
+    width: min(90%, 40rem);
     margin: auto;
 }
 
@@ -28,13 +29,14 @@ h2 {
     padding: 1rem 0rem;
     font-size: 1.25rem;
     font-weight: 400;
-    color: #FFFF00;
+    color: #deb028;
     line-height: 1.52rem;
-    font-family: 'Optima Medium';
+    font-family: "Roboto", sans-serif;
 }
 
 h2 {
-    font-family: 'Optima Bold';
+    font-family: "Roboto", sans-serif;
+    font-weight: bold;
 }
 
 a {
@@ -42,7 +44,7 @@ a {
 }
 
 img {
-    width: 100%;
+    max-width: 22rem;
     margin: .75rem 0rem;
     transform: scale(4.5);
     opacity: 0;

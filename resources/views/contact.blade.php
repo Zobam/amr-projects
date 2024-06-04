@@ -160,21 +160,9 @@
             }
         })
 
-        const closeSideBtn = document.querySelector('#close-btn');
-        const watchAgainBtn = document.querySelector('#watch-again-btn');
         const videoElement = document.querySelector("#verified-video");
 
-        watchAgainBtn.style.display = 'none';
         const sideVideoContainer = document.querySelector('#side-video');
-        closeSideBtn.addEventListener('click', function() {
-            videoElement.pause();
-            sideVideoContainer.style.display = 'none';
-            watchAgainBtn.style.display = 'block';
-        });
-        watchAgainBtn.addEventListener('click', function() {
-            showVideo();
-            watchAgainBtn.style.display = 'none';
-        });
         // showVideo
         function showVideo() {
             sideVideoContainer.style.display = 'block';

@@ -36,6 +36,43 @@ nav button.menu {
     /* color: rgb(237, 237, 237); */
 }
 
+nav li.case-study {
+    position: relative;
+}
+
+nav li.case-study div.toast {
+    color: rgb(15, 15, 1);
+    border: 1px solid white;
+    position: absolute;
+    left: 0px;
+    top: 2rem;
+    padding: .5rem;
+    background-color: #fff;
+    box-shadow: 1px -2px 2px 2px gray;
+}
+
+nav li.case-study div.toast span {
+    display: block;
+    height: .25rem;
+    width: 100%;
+    background-color: green;
+    border-radius: 5%;
+    margin-top: .5rem;
+    animation-name: animateToast;
+    animation-duration: 7.5s;
+}
+
+/* toast disappearance animation */
+@keyframes animateToast {
+    0% {
+        width: 100%;
+    }
+
+    100% {
+        width: 0%;
+    }
+}
+
 nav a#case-study-link.disabled {
     cursor: not-allowed;
 }

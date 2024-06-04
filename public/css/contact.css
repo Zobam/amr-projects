@@ -28,8 +28,9 @@ main>section>div {
 
 h1 {
     text-transform: uppercase;
-    font-family: 'Optima Bold';
+    font-family: "Roboto", sans-serif;
     font-size: 1.8rem;
+    font-weight: bold;
 }
 
 span {
@@ -143,7 +144,8 @@ nav a.disabled {
 div#verifying {
     display: none;
     padding: .5rem;
-    font-family: 'Optima Bold';
+    font-family: "Roboto", sans-serif;
+    font-weight: bold;
     border-radius: .5rem;
     margin-top: .5rem;
 }
