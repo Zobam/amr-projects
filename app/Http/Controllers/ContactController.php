@@ -30,11 +30,11 @@ class ContactController extends Controller
             'email' => ['required', 'email'],
             'passport_link' => ['required', 'max:50'],
         ]);
-        Log::warning($request->all());
+        // Log::warning($request->all());
 
         try {
-            // $recipients = ['wr@amrprojects.com', $request->email];
-            $recipients = ['chizoba@bexit.com.ng', $request->email];
+            $recipients = ['wr@amrprojects.com', $request->email];
+            // $recipients = ['chizoba@bexit.com.ng', $request->email];
 
             // put 'yes' or 'no' for 1 or 0
             $request['gov_rep'] = $request->gov_rep == 1 ? 'Yes' : 'No';
@@ -42,7 +42,7 @@ class ContactController extends Controller
             $str_arr = explode('.', $request->passport_link);
             $request['is_pdf'] = $str_arr[count($str_arr) - 1] == 'pdf';
 
-            Log::info($request->all());
+            // Log::info($request->all());
             // send mail to guest
             foreach ($recipients as $recipient) {
                 // set to_guest for the purpose of customizing the email body
