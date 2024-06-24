@@ -48,10 +48,15 @@
                         duration,
                         delay: duration / 16,
                     });
+                    // animate menu button
+                    gsap.to('button.menu', {
+                        opacity: 1,
+                        duration: 1,
+                        // scale: .25,
+                        delay: 3,
+                    })
                     clearCurrentInt();
                 }
-                console.log('just checking: ' +
-                    checkCount++);
             }, 100 / 2);
 
             function clearCurrentInt() {

@@ -52,6 +52,14 @@ a.active {
     letter-spacing: .075rem;
 }
 
+@media screen and (max-width: 564px) {
+    a.active {
+        color: rgb(4, 0, 0);
+        text-shadow: 1px 1px 1px;
+        letter-spacing: .075rem;
+    }
+}
+
 a.activeContact {
     color: black;
 }
@@ -70,7 +78,7 @@ section#video-container iframe {
     position: absolute;
     top: 0%;
     width: 100vw;
-    height: 100vh;
+    height: 100dvh;
     /* pointer-events: none; */
 }
 

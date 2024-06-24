@@ -22,8 +22,9 @@
         const caseStudyLink = document.querySelector('#case-study-link');
         const toastSpan = document.querySelector('.toast');
 
+
+
         menuBtn.addEventListener('click', function() {
-            console.log(navUl.style.display, 'clicked');
             if (navUl.style.display) {
                 hideNavUl();
             } else {

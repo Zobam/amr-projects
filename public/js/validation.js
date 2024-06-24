@@ -74,10 +74,6 @@ function checkFormValidity(elemID, type) {
     }
     if (document.getElementById("country").value) {
         contactForm.country = true;
-        console.log(
-            "this is the value of country: ",
-            document.getElementById("country").value
-        );
     } else {
         contactForm.country = false;
     }
@@ -88,7 +84,6 @@ function checkFormValidity(elemID, type) {
     let formHasError = false;
     for (const field in contactForm) {
         if (!contactForm[field]) {
-            console.log(field, contactForm[field]);
             if (isGovRep) {
                 if (field == "organization") {
                     continue;

@@ -148,7 +148,6 @@
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <script>
         document.querySelector(".form").addEventListener("submit", (event) => {
-            console.log('checking validity of recaptcha');
             const recaptchaErrorElem = document.getElementById('recaptcha_error');
             const response = grecaptcha.getResponse();
             if (response.length === 0) {

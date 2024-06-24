@@ -25,7 +25,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous">
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="{{ asset('build/assets/app-0d91dc04.js') }}"></script>
     <link rel="icon" href="{{ asset('images/amr_favicon.png') }}" type="image/x-icon">
 
 </head>
@@ -49,11 +49,16 @@
         const closeBtn = document.querySelector('.close-btn');
         const videoContainer = document.querySelector('#video-container');
         // don't play video again if user has watched it
-        console.log(window.location.pathname);
         if (localStorage.getItem('watchedVideo') == 'true' && (window.location.pathname != '/intro')) {
             videoContainer.style.display = 'none';
             document.body.classList.remove('fix-scroll');
         }
+        // hide nav
+        if (!videoContainer.style.display) {
+            navElem.style.display = "none";
+            document.querySelector('main').style.display = "none";
+        }
+
         // close the video
         closeBtn.addEventListener('click', function() {
             videoContainer.style.display = 'none';
@@ -65,7 +70,6 @@
             window.location = '/';
         });
 
-        const duration = 4;
         gsap.from('.close-btn-container', {
             opacity: 0,
             duration: 2,

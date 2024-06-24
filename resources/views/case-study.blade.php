@@ -50,9 +50,7 @@
 
         function positionVideo() {
 
-            console.log(cordinates);
             const spaceBelow = window.innerHeight - cordinates.y - cordinates.height;
-            console.log('Space below: ', spaceBelow);
             if (spaceBelow > 0) {
                 videoElem.style.marginTop = `${spaceBelow/2.25}px`;
             } else {
