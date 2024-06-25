@@ -36,11 +36,13 @@
         {{ $slot }}
     </main>
     <section id="video-container">
-        <iframe width="560" height="315"
-            src="https://www.youtube.com/embed/Mi3QsF8AVL4?si=zdNNLpEtNF5_gjXM&autoplay=1&mute=1"
-            title="YouTube video player" frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        <video id="verified-video" controls autoplay muted>
+            <source
+                src="https://firebasestorage.googleapis.com/v0/b/rutride-fb-d85a7.appspot.com/o/AMR_intro.mp4?alt=media&token=14d10214-774d-4f0f-9a37-044c7f4db925"
+                type="video/mp4">
+            <source src="movie.ogg" type="video/ogg">
+            Your browser does not support the video tag.
+        </video>
         <div class="close-btn-container"><button class="close-btn">X Close</button></div>
     </section>
     <!-- include animation library -->

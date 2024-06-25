@@ -71,10 +71,10 @@ section#video-container {
     width: 100%;
     height: 100dvh;
     overflow: hidden;
-    background-color: azure;
+    background-color: rgb(12, 12, 12);
 }
 
-section#video-container iframe {
+section#video-container video {
     position: absolute;
     top: 0%;
     width: 100vw;
