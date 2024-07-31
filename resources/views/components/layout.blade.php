@@ -36,7 +36,7 @@
         {{ $slot }}
     </main>
     <section id="video-container">
-        <video id="verified-video" controls autoplay muted>
+        <video id="verified-video" controls>
             <source
                 src="https://firebasestorage.googleapis.com/v0/b/rutride-fb-d85a7.appspot.com/o/AMR_intro.mp4?alt=media&token=14d10214-774d-4f0f-9a37-044c7f4db925"
                 type="video/mp4">

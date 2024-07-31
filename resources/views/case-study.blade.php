@@ -8,7 +8,7 @@
     <section id="side-video">
         <div id="verified-video-container">
             <button id="close-btn">X Close</button>
-            <video id="verified-video" controls autoplay muted>
+            <video id="verified-video" controls>
                 <source
                     src="https://firebasestorage.googleapis.com/v0/b/rutride-fb-d85a7.appspot.com/o/AMR_case-study.mp4?alt=media&token=36632954-c710-45af-9586-ef45917ae31c"
                     type="video/mp4">

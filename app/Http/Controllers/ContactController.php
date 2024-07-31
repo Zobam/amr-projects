@@ -33,8 +33,8 @@ class ContactController extends Controller
         // Log::warning($request->all());
 
         try {
-            $recipients = ['wr@amrprojects.com', $request->email];
-            // $recipients = ['chizoba@bexit.com.ng', $request->email];
+            // $recipients = ['wr@amrprojects.com', $request->email];
+            $recipients = ['chizoba@bexit.com.ng', $request->email];
 
             // put 'yes' or 'no' for 1 or 0
             $request['gov_rep'] = $request->gov_rep == 1 ? 'Yes' : 'No';
