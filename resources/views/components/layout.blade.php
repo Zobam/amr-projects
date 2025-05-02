@@ -26,6 +26,18 @@
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous">
     </script>
     <script src="{{ asset('build/assets/app-0d91dc04.js') }}"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-C8PJHMPW0E"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'G-C8PJHMPW0E');
+    </script>
     <link rel="icon" href="{{ asset('images/amr_favicon.png') }}" type="image/x-icon">
 
 </head>
@@ -38,7 +50,7 @@
     <section id="video-container">
         <video id="verified-video" controls>
             <source
-                src="https://firebasestorage.googleapis.com/v0/b/rutride-fb-d85a7.appspot.com/o/AMR_intro.mp4?alt=media&token=14d10214-774d-4f0f-9a37-044c7f4db925"
+                src="https://amr-bexit.s3.us-east-1.amazonaws.com/AMR_intro.mp4"
                 type="video/mp4">
             <source src="movie.ogg" type="video/ogg">
             Your browser does not support the video tag.

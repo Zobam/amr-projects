@@ -10,7 +10,7 @@
             <button id="close-btn">X Close</button>
             <video id="verified-video" controls>
                 <source
-                    src="https://firebasestorage.googleapis.com/v0/b/rutride-fb-d85a7.appspot.com/o/AMR_case-study.mp4?alt=media&token=36632954-c710-45af-9586-ef45917ae31c"
+                    src="https://amr-bexit.s3.us-east-1.amazonaws.com/AMR_case-study.mp4"
                     type="video/mp4">
                 <source src="movie.ogg" type="video/ogg">
                 Your browser does not support the video tag.
