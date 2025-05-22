@@ -1,5 +1,11 @@
 <x-layout styleLink='css/homepage.css'>
     <section>
+        @if (session()->has('status'))
+            <div style="position: absolute; top: 0rem;left: 0rem;" class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>Contact received.</strong> Check your email for the verification link.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
         <div class="d-flex justify-content-center">
             <img src="/images/amr-updated-logo.png" id="amr-logo" alt="amr logo">
         </div>

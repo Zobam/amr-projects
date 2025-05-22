@@ -41,7 +41,14 @@ Route::get('/_', function () {
 Route::get('/whitelist_blocked_ip/{target_ip?}', [WhitelistController::class, 'whitelist']);
 
 Route::get('/send-email', [ContactController::class, 'test_mail']);
-
+Route::get('/email/verify/{token}', [ContactController::class, 'verify_email']);
+Route::post('/email/verify', [ContactController::class, 'authorize_email']);
+Route::post('/logout', function (Request $request) {
+    auth()->logout();
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+    return redirect('/')->with('success', 'Logged out successfully');
+})->middleware('auth')->name('logout');
 
 //Clear Cache facade value:
 Route::get('/clear-cache', function () {

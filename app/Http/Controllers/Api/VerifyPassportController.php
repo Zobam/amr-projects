@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Mail\FailedAttempts;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rules\File;
+use Illuminate\Support\Facades\Hash;
 
 // define enums for various error situation. This will help to count verification attempts if and only if the error is due to uploading non passport image ie error code 001
 enum ErrorCodes: string
@@ -24,6 +26,7 @@ class VerifyPassportController extends Controller
     // verify passport
     public function verify_passport(Request $request)
     {
+        return $request->all();
         /* $result = [
             "api_request" => [
                 "error" => [],
@@ -483,5 +486,62 @@ class VerifyPassportController extends Controller
         if (file_exists($link)) {
             unlink($link);
         }
+    }
+    public function send_verification_link(Request $request)
+    {
+        $validated = $request->validate([
+            'email' => ['required', 'email'],
+        ]);
+        // check if email already verified
+        $user = User::where('email', $request->email)->whereNotNull('email_verified_at')->first();
+        if ($user) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Email already verified'
+            ]);
+        }
+        // check if email already exists
+        $user = User::where('email', $request->email)->first();
+        if ($user) {
+            $user->password = Hash::make($request->email);
+            $user->save();
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Verification link already sent. Please check your email.'
+            ]);
+        }
+        $user = new User();
+        $user->name = "user" . (User::count() + 1);
+        $user->email = $request->email;
+        $user->password = Hash::make($request->email);
+        $user->save();
+        $request->merge([
+            'email_type' => 'email_verification_link',
+            'token' => base64_encode($user->password),
+        ]);
+
+        Mail::to($request->email)->send(new \App\Mail\ContactReceived($request));
+        return response()->json([
+            'status' => 'success',
+            'message' => "Email sent to {$request->email}"
+        ]);
+    }
+    public function check_email(Request $request)
+    {
+        $validated = $request->validate([
+            'email' => ['required', 'email'],
+        ]);
+        // check if email already verified
+        $user = User::where('email', $request->email)->whereNotNull('email_verified_at')->first();
+        if (!$user) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Email not verified'
+            ])->setStatusCode(400);
+        }
+        return response()->json([
+            'status' => 'success',
+            'message' => "Email is valid"
+        ]);
     }
 }

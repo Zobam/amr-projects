@@ -229,3 +229,32 @@ section#custom-video {
     display: flex;
     justify-content: center;
 }
+
+div#verifyEmail {
+    display: none;
+    padding: 1rem;
+    font-family: "Lato", sans-serif;
+    font-weight: bold;
+    border-radius: .5rem;
+    margin-top: .5rem;
+    position: absolute;
+    top: 3.1rem;
+    left: 0rem;
+    width: 100%;
+    min-height: 85vh;
+    background-color: #16203eda;
+    border: 1px solid #3458c3;
+    justify-content: center;
+    align-items: center;
+}
+
+div#verifyEmail div {
+    background-color: #fffffff3;
+    width: min(90%, 40rem);
+    padding: 2rem;
+}
+
+div#verifyEmail div.linkSent,
+#emailNotVerified {
+    display: none;
+}

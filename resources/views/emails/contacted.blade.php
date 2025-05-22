@@ -68,8 +68,8 @@
             <h1>You Have a New Contact From AMR</h1>
             <h2>The contact details are as follow:</h2>
             <div class="">
-                @if (!$data->is_pdf)
-                    {{-- change 'public_path' to 'asset' when deployed to cpanel because of the change in file structure --}}
+                {{-- @if (!$data->is_pdf)
+                    // change 'public_path' to 'asset' when deployed to cpanel because of the change in file structure
                     <div style="width: min(20rem, 96%); margin: auto">
                         <figure><img src="{{ $message->embed(public_path($data->passport_link)) }}"
                                 style="max-width: 100%;" alt="guest passport image">
@@ -77,7 +77,7 @@
                             </figcaption>
                         </figure>
                     </div>
-                @endif
+                @endif --}}
                 <p>
                     Representing a government: <span>{{ $data->gov_rep ?? '' }}</span>
                 </p>

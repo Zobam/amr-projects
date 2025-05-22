@@ -5,21 +5,31 @@
         <li><a href="/" class="{{ request()->is('/') ? 'active' : '' }}">Home</a></li>
         <li><a href="/contact" class="{{ request()->is('contact') ? 'active activeContact' : '' }}">Contact Us</a></li>
         <li class="case-study"><a id="case-study-link" href="/case-study"
-                class="disabled {{ request()->is('case-study') ? 'active activeContact' : '' }}">Case Study <span
+                class="{{ request()->is('case-study') ? 'active activeContact' : '' }}">Case Study <span
                     class="icon">
+                    @guest
                     <i class="fa fa-lock"></i>
+                    @endguest
                 </span> </a>
             <div class="toast">
                 Fill out the contact form to have <strong>access</strong> to the Case Study <span></span>
             </div>
         </li>
+        {{-- @auth
+        <li><a href="{{ route('logout') }}" onclick="event.preventDefault();
+            document.getElementById('logout-form').submit();">Logout</a>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                @csrf
+            </form>
+        </li>
+        @endauth --}}
+        
     </ul>
     <script>
         const navUl = document.querySelector('ul');
         const menuBtn = document.querySelector('button.menu');
         const navElem = document.querySelector('nav');
         const menuIcon = document.querySelector('button i.fa');
-        const caseStudyLink = document.querySelector('#case-study-link');
         const toastSpan = document.querySelector('.toast');
 
 
@@ -43,11 +53,10 @@
         }
         // hide case-study link if passport is not verified
         if (localStorage.getItem('verifiedPassport')) {
-            caseStudyLink.classList.remove('disabled');
             document.querySelector('nav span.icon').classList.add('hide');
         }
         // prevent navigation when disabled link is clicked
-        caseStudyLink.addEventListener('click', (e) => {
+        /* caseStudyLink.addEventListener('click', (e) => {
             if (!localStorage.getItem('verifiedPassport')) {
                 toastSpan.style.display = 'inline-block';
                 setTimeout(() => {
@@ -56,7 +65,7 @@
                 e.preventDefault();
                 return;
             }
-        });
+        }); */
         // hide menu if clicked outside for mobile
         document.addEventListener('click', (e) => {
             if (!navElem.contains(e.target)) {

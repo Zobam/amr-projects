@@ -22,13 +22,13 @@
             </p>
             <form name="contactForm" class="form" action="/contact" method="post" enctype="multipart/form-data">
                 @csrf
-                <div class="form-group">
+                {{-- <div class="form-group">
                     <label for="passport">Scan the Data page of your International Passport and upload it here:
                         <span>*</span></label>
                     <input type="file" name="passport" id="passport">
                     <!-- loading animation -->
                     <div id="verifying" class="">verifying passport ...</div>
-                </div>
+                </div> --}}
                 <div class="form-group">
                     <label for="gov-rep">Are you representing a Government:<span>*</span></label>
                     <label><input type="radio" name="gov_rep" value=1 class="gov-rep"
@@ -115,39 +115,43 @@
                     <div class="g-recaptcha" data-sitekey="6Lel4Z4UAAAAAOa8LO1Q9mqKRUiMYl_00o5mXJrR"></div>
                     <span class="error" id="recaptcha_error">Please, verify that you are human.</span>
                 </div>
-                <p class="text-center mt-4" style="color: green">Once submitted, you will have access to watch the
-                    Case
-                    Study video</p>
+                <p class="text-center mt-4" style="color: green">Once submitted, a verification link will be sent to your email for you to verify your email, and then have access to watch the Case Study video</p>
                 <div class="d-flex justify-content-center">
+                    @guest
                     <button id="submit-btn" disabled>Send</button>
+                    @else
+                    <div class="alert alert-info mt-4" role="alert">
+                        Thank you for contacting us.
+                    </div>
+                    @endguest
                 </div>
             </form>
+            <div id="verifyEmail" class="">
+                <div class="">
+                    <h2 class="text-center">Verify your email</h2>
+                    <div class="linkSent" style="width: 100%;">
+                        <p class="">A verification link has been sent to your email. Please check your inbox and click on the link to verify your email address.</p>
+                        <form id="verifyEmailForm" class="text-center mt-4" action="/api/verify-email" method="post">
+                            @csrf
+                            <button id="checkEmailBtn" type="button" style="padding: 6px 4px;">I have verified my email</button>
+                        </form>
+                    </div>
+                    <p id="sendingIndicator" style="font-weight: normal">Sending verification link ...</p>
+                    <span id="emailNotVerified" class="" style="color: red">Email is not yet verified.</span>
+                </div>
+            </div>
         </div>
     </section>
-    {{-- <section id="side-video">
-        <button id="close-btn">X Close</button>
-        <video id="verified-video" width="320" height="240" controls>
-            <source
-                src="https://firebasestorage.googleapis.com/v0/b/rutride-fb-d85a7.appspot.com/o/InnoMux-2.mp4?alt=media&token=591c8a94-88ef-46f7-abfc-5e32ed4aa1f4"
-                type="video/mp4">
-            <source src="movie.ogg" type="video/ogg">
-            Your browser does not support the video tag.
-        </video>
-    </section>
-    <section id="custom-video">
-        <video width="320" height="240" autoplay muted>
-            <source
-                src="https://firebasestorage.googleapis.com/v0/b/rutride-fb-d85a7.appspot.com/o/Laravel%20Multi-Step%20Validation%20with%20DB%20Transactions.mp4?alt=media&token=6aed94a1-4a44-4816-9b6b-4bf01f1947a1"
-                type="video/mp4">
-            <source src="movie.ogg" type="video/ogg">
-            Your browser does not support the video tag.
-        </video>
-    </section> --}}
     <script src="{{ asset('/js/contact1.js') }}"></script>
     <script src="{{ asset('/js/validation.js') }}"></script>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <script>
-        document.querySelector(".form").addEventListener("submit", (event) => {
+        const verifyEmail = document.getElementById('verifyEmail');
+        const contactFormNoPassport = document.querySelector('.form');
+        const verifyEmailForm = document.getElementById('verifyEmailForm');
+        const emailNotVerified = document.getElementById('emailNotVerified');
+        document.getElementById('checkEmailBtn').addEventListener('click', checkEmailIsVerified);
+        contactFormNoPassport.addEventListener("submit", (event) => {
             const recaptchaErrorElem = document.getElementById('recaptcha_error');
             const response = grecaptcha.getResponse();
             if (response.length === 0) {
@@ -156,6 +160,10 @@
             } else {
                 document.getElementById('passport_link').value = passportLink;
                 hideElement(recaptchaErrorElem);
+                verifyEmail.style.display = 'flex';
+                contactFormNoPassport.style.display = 'none';
+                sendVerificationEmail();
+                event.preventDefault();
             }
         })
 
@@ -168,6 +176,47 @@
             videoElement.play();
             videoElement.muted = false;
             closeSideBtn.scrollIntoView();
+        }
+
+        async function sendVerificationEmail() {
+            const email = document.getElementById('email').value;
+            try {
+                const response = await axios.post("/api/send-verification-link", {
+                    email
+                });
+                console.log(response);
+                if(response.status === 200 || response.response.status === 409) {
+                    const linkSent = document.querySelector('.linkSent');
+                    const sendingIndicator = document.getElementById('sendingIndicator');
+                    linkSent.style.display = 'block';
+                    sendingIndicator.style.display = 'none';
+                    if(response.data.message=="Email already verified"){
+                        emailNotVerified.style.display = 'block';
+                        emailNotVerified.innerHTML = response.data.message;
+                        setTimeout(() => {
+                            window.location.href = "/case-study";
+                        }, 250);
+                }}
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        async function checkEmailIsVerified() {
+            const email = document.getElementById('email').value;
+            try {
+                const response = await axios.post("/api/check-email", {
+                    email
+                });
+                console.log(response);
+                if (response.status === 200) {
+                    contactFormNoPassport.submit();
+                }else{
+                    emailNotVerified.style.display = 'block';
+                }
+            } catch (error) {
+                emailNotVerified.style.display = 'block';
+                console.log(error);
+            }
         }
         // test
         // localStorage.setItem('verifiedPassport', true);

@@ -14,6 +14,7 @@ use Illuminate\Queue\SerializesModels;
 class ContactReceived extends Mailable
 {
     use Queueable, SerializesModels;
+    private $has_email_type = false;
 
     /**
      * Create a new message instance.
@@ -21,6 +22,7 @@ class ContactReceived extends Mailable
     public function __construct(public Request $data)
     {
         $this->data = $data;
+        $this->has_email_type = $this->data->has('email_type');
     }
 
     /**
@@ -29,7 +31,7 @@ class ContactReceived extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Contact Received',
+            subject: $this->has_email_type ? 'Verify Email' : 'Contact Received',
         );
     }
 
@@ -39,7 +41,7 @@ class ContactReceived extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.contacted',
+            view: $this->has_email_type ? 'emails.verify_email' : 'emails.contacted',
         );
     }
 

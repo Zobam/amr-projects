@@ -15,7 +15,7 @@ let isGovRep = false;
 codeInput.addEventListener("focus", filterCodes);
 codeInput.addEventListener("keyup", filterCodes);
 // respond to file change
-passportInput.addEventListener("change", verifyPassport);
+// passportInput.addEventListener("change", verifyPassport);
 // respond to is gov rep change
 let prev = null;
 for (var i = 0; i < isGovRepRadioInput.length; i++) {
@@ -70,7 +70,8 @@ function hideElement(elem, hide = true) {
 }
 
 function filterCodes() {
-    const val = codeInput.value;
+    let val = codeInput.value;
+    val = val[0] == "+" ? val.slice(1) : val;
     let filteredAllCountryCodes = allCountryCodes.filter(
         (country) =>
             country.name.toLowerCase().indexOf(val.toLowerCase()) != -1 ||

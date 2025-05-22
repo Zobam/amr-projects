@@ -76,6 +76,15 @@ section#side-video button {
     }
 }
 
+section#email-form input {
+    width: min(80%, 760px);
+    padding: var(--padding);
+    border-radius: var(--border-radius);
+    margin-bottom: 1rem;
+    border: 1px solid #00000057;
+
+}
+
 button#showFullscreenBtn {
     position: absolute;
     border-radius: .5rem;
