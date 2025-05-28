@@ -11,7 +11,7 @@
                 <button id="close-btn">X Close</button>
                 <video id="verified-video" controls>
                     <source
-                        src="https://amr-bexit.s3.us-east-1.amazonaws.com/AMR_case-study.mp4"
+                        src="https://amr-bexit.s3.us-east-1.amazonaws.com/cs_oiyhakdsl123ljghuy.mp4"
                         type="video/mp4">
                     <source src="movie.ogg" type="video/ogg">
                     Your browser does not support the video tag.

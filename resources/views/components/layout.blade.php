@@ -50,7 +50,7 @@
     <section id="video-container">
         <video id="verified-video" controls>
             <source
-                src="https://amr-bexit.s3.us-east-1.amazonaws.com/AMR_intro.mp4"
+                src="https://amr-bexit.s3.us-east-1.amazonaws.com/intro_adlkhaqiuogjvbnjfvd1233kf.mp4"
                 type="video/mp4">
             <source src="movie.ogg" type="video/ogg">
             Your browser does not support the video tag.
